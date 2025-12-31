@@ -17,10 +17,10 @@ int main(int argc, char** argv) {
 
 	if (!nob_mkdir_if_not_exists("out")) return 1;
 
-	if (needs_rebuild1("out/mongoose.o", "lib/mongoose/mongoose.c")) {
+	if (needs_rebuild1("out/mongoose.o", "3rd_party/mongoose/mongoose.c")) {
 		cmd_append(&cmd, CC,
 				"-c",
-				"lib/mongoose/mongoose.c",
+				"3rd_party/mongoose/mongoose.c",
 				"-o",
 				"out/mongoose.o",
 				"-DMG_TLS=MG_TLS_BUILTIN");
@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
 	
 	cmd_append(&cmd, CC, "main.c", "-o", "out/rrwebsite");
 	cmd_append(&cmd, "out/mongoose.o");
-	cmd_append(&cmd, "-I./lib");
+	cmd_append(&cmd, "-I./3rd_party");
 	if (!cmd_run(&cmd)) return 1;
 
 	return 0;
