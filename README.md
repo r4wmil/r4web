@@ -1,11 +1,10 @@
-# rrweb
+# rrwebsite
 My cool website
 
 ## Deploy
 ```sh
-git sm init
-git sm update
-gcc nob.c -o nob
-./nob
-./rrwebsite --port 6969
+git submodule update --init
+gcc build.c -o build
+./build
+./out/rrwebsite --port 6969
 ```

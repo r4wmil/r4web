@@ -1,8 +1,9 @@
 rrwebsite
 credentials.h
 out/
+web/res
 web/res/
 ssr_generated/
-nob
-nob.old
+build
+build.old
 dbs/
