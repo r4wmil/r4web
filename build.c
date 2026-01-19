@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 	SSRConvert("web/templates/default-after.html", "ssr_generated/ssr_template_default_after.h", "ssr_template_default_after");
 	SSRConvert("web/templates/default-before.html", "ssr_generated/ssr_template_default_before.h", "ssr_template_default_before");
 	
-	cmd_append(&cmd, CC, "main.c", "-o", "out/rrwebsite");
+	cmd_append(&cmd, CC, "main.c", "-o", "out/r4web");
 	cmd_append(&cmd, "out/mongoose.o");
 	cmd_append(&cmd, "-I./3rd_party");
 	if (!cmd_run(&cmd)) return 1;

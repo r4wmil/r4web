@@ -6,5 +6,5 @@ My cool website
 git submodule update --init
 gcc build.c -o build
 ./build
-./out/rrwebsite --port 6969
+./out/r4web --port 6969
 ```
