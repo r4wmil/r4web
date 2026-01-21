@@ -1,6 +1,8 @@
 #ifndef SSR_H
 #define SSR_H
 
+#include "stdlib.h"
+
 typedef struct SSRData {
 	struct mg_http_message* hm;
 	char lang_is_ru;

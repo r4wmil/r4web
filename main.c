@@ -9,8 +9,6 @@
 
 #include "mongoose/mongoose.h"
 
-#include "splashes.h"
-
 #define NOB_IMPLEMENTATION
 #include "nob.h"
 #undef NOB_IMPLEMENTATION

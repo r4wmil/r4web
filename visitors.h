@@ -1,6 +1,7 @@
 #ifndef VISITORS_H
 #define VISITORS_H
 
+#include "nob.h"
 #include "mongoose/mongoose.h"
 
 #define VISITOR_PENDING_SECONDS 5
