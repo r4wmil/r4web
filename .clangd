@@ -1,0 +1,2 @@
+CompileFlags:
+  Add: [-I., -I./3rd_party]
