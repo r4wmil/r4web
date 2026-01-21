@@ -7,3 +7,5 @@ ssr_generated/
 build
 build.old
 dbs/
+compile_commands.json
+.cache

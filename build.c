@@ -43,6 +43,7 @@ int main(int argc, char** argv) {
 	
 	cmd_append(&cmd, CC, "main.c", "-o", "out/r4web");
 	cmd_append(&cmd, "out/mongoose.o");
+	cmd_append(&cmd, "-I.");
 	cmd_append(&cmd, "-I./3rd_party");
 	if (!cmd_run(&cmd)) return 1;
 
