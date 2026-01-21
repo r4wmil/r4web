@@ -23,8 +23,6 @@
 #include "binary_rw.h"
 #undef BINARY_RW_IMPLEMENTATION
 
-#include "credentials.h" /* Created by user */
-
 // --- UTILS ---
 
 void RandomBytes(void *buf, size_t len) {
