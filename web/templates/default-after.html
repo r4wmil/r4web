@@ -1,17 +1,33 @@
 		<footer>
 			<span class="rr-footer-language">
-				<!--%c
-					SSR_EN_PRINTF("<a href=\"?lang=ru\">Русский</a>");
-					SSR_RU_PRINTF("<a href=\"?lang=en\">English</a>");
-				%-->
+				<a href="" class="lang_en" onclick="SetLanguage('ru'); return false;">Русский</a>
+				<a href="" class="lang_ru" onclick="SetLanguage('en'); return false;">English</a>
 			</span>
 			•
 			<span class="rr-footer-copyright">
-				<!--%c
-					SSR_EN_PRINTF("Ramil Khasanshin © 2025");
-					SSR_RU_PRINTF("Рамиль Хасаншин © 2025");
-				%-->
+				<span class="lang_en">Ramil Khasanshin © 2025</span>
+				<span class="lang_ru">Рамиль Хасаншин © 2025</span>
 			</span>
 		</footer>
 	</body>
+	<script>
+		var page_language = "en";
+		function QuerySetVisible(selector, state) {
+			document.querySelectorAll(selector).forEach(tag => tag.style.display = (state ? 'unset' : 'none'));
+		}
+		function UpdateLanguage() {
+			if (page_language == "en") {
+				QuerySetVisible(".lang_en", 1);
+				QuerySetVisible(".lang_ru", 0);
+			} else {
+				QuerySetVisible(".lang_en", 0);
+				QuerySetVisible(".lang_ru", 1);
+			}
+		}
+		function SetLanguage(new_page_language) {
+			page_language = new_page_language;
+			UpdateLanguage();
+		}
+		UpdateLanguage();
+	</script>
 </html>

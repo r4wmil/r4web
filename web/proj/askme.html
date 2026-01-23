@@ -3,16 +3,31 @@
 <div class="rcontent">
 	<div class="rbox">
 		<h2>
-			<!--%c
-				SSR_EN_PRINTF("Ask me, bro");
-				SSR_RU_PRINTF("Задай вопрос, бро");
-			%-->
+				<span class="lang_en">Ask me, bro</span>
+				<span class="lang_ru">Задай вопрос, бро</span>
 		</h2>
 		<div style="display: flex; justify-content: center; gap: 10px;">
 			<input id="askme_question" type="text" autocomplete="off" placeholder='<!--%cSSR_EN_PRINTF("Question text"); SSR_RU_PRINTF("Текст вопроса");%-->'></input>
 			<button id="askme_send_btn" onclick="SendAskmeQuestion()">Send</button>
 		</div>
-		<p id="askme_result"></p>
+		<p id="askme_result">
+		<span id="askme_status_ok">
+			<span class="lang_en">Question sent successefuly.</span>
+			<span class="lang_ru">Вопрос успешно отправлен.</span>
+		</span>
+		<span id="askme_status_long">
+			<span class="lang_en">Error. Question is too long!</span>
+			<span class="lang_ru">Ошибка. Вопрос слишком длинный!</span>
+		</span>
+		<span id="askme_status_empty">
+			<span class="lang_en">Error. Question empty!</span>
+			<span class="lang_ru">Ошибка. Вопрос пустой!</span>
+		</span>
+		<span id="askme_status_freq">
+			<span class="lang_en">Error. Sending too frequently!</span>
+			<span class="lang_ru">Ошибка. Слишком часто отправляешь!</span>
+		</span>
+		</p>
 	</div>
 </div>
 <script src="enums.js"></script> <!-- Generated -->
@@ -35,34 +50,19 @@
 			.then(resp => resp.arrayBuffer())
 			.then(buf => HandleAskmeServerResponse(buf));
 	}
+	function HideStatus() {
+		Array.from(askme_result.children).forEach(c => { c.style.display = "none"; });
+	}
+	HideStatus();
 	function HandleAskmeServerResponse(buf) {
 		const reader = new ByteReader(buf);
 		var code = reader.u8();
+		HideStatus();
 		switch (code) {
-			case 0:
-				askme_result.innerHTML = `
-					<!--%c SSR_RU_PRINTF("Вопрос успешно отправлен."); %-->
-					<!--%c SSR_EN_PRINTF("Question sent successefuly."); %-->
-				`;
-				break;
-			case 1:
-				askme_result.innerHTML = `
-					<!--%c SSR_RU_PRINTF("Ошибка. Вопрос слишком длинный!"); %-->
-					<!--%c SSR_EN_PRINTF("Error. Question is too long!"); %-->
-				`;
-				break;
-			case 2:
-				askme_result.innerHTML = `
-					<!--%c SSR_RU_PRINTF("Ошибка. Вопрос пустой!"); %-->
-					<!--%c SSR_EN_PRINTF("Error. Question empty!"); %-->
-				`;
-				break;
-			case 3:
-				askme_result.innerHTML = `
-					<!--%c SSR_RU_PRINTF("Ошибка. Слишком часто отправляешь!"); %-->
-					<!--%c SSR_EN_PRINTF("Error. Sending too frequently!"); %-->
-				`;
-				break;
+			case 0: askme_status_ok.style.display    = "unset"; break;
+			case 1: askme_status_long.style.display  = "unset"; break;
+			case 2: askme_status_empty.style.display = "unset"; break;
+			case 3: askme_status_freq.style.display  = "unset"; break;
 		}
 	}
 </script>

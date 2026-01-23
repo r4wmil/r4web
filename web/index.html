@@ -103,22 +103,8 @@
 </style>
 <div class="rr-welcome-pane">
 	<div class="rwelcome">
-		<!--%c
-			SSR_EN_PRINTF("<span>w</span>");
-			SSR_EN_PRINTF("<span>e</span>");
-			SSR_EN_PRINTF("<span>l</span>");
-			SSR_EN_PRINTF("<span>c</span>");
-			SSR_EN_PRINTF("<span>o</span>");
-			SSR_EN_PRINTF("<span>m</span>");
-			SSR_EN_PRINTF("<span>e</span>");
-			SSR_RU_PRINTF("<span>в</span>");
-			SSR_RU_PRINTF("<span>е</span>");
-			SSR_RU_PRINTF("<span>л</span>");
-			SSR_RU_PRINTF("<span>к</span>");
-			SSR_RU_PRINTF("<span>а</span>");
-			SSR_RU_PRINTF("<span>м</span>");
-			SSR_RU_PRINTF("<span></span>");
-		%-->
+		<span class="lang_en"><span>w</span><span>e</span><span>l</span><span>c</span><span>o</span><span>m</span><span>e</span></span>
+		<span class="lang_ru"><span>в</span><span>е</span><span>л</span><span>к</span><span>а</span><span>м</span><span></span></span>
 	</div>
 	<div class="rsplash">
 		<span>
@@ -133,10 +119,8 @@
 	<div class="rbox rcontact" style="background: none; box-shadow: none;">
 		<div style="display: flex; justify-content: center;">
 			<h2>
-				<!--%c
-					SSR_EN_PRINTF("Links");
-					SSR_RU_PRINTF("Ссылки");
-				%-->
+				<span class="lang_en">Links</span>
+				<span class="lang_ru">Ссылки</span>
 			</h2>
 		</div>
 		<hr>
@@ -158,23 +142,17 @@
 						<path d="M17.4009 19.2C15.8965 20.3302 14.0265 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12V13.5C21 14.8807 19.8807 16 18.5 16C17.1193 16 16 14.8807 16 13.5V8M16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 					</svg><span>Email</span>
 				</a>
-				<a href="https://github.com/rawrmil/rrwebsite">
-					<!--%c
-						SSR_EN_PRINTF("Website source code");
-						SSR_RU_PRINTF("Исходный код сайта");
-					%-->
+				<a href="https://github.com/r4wmil/r4web">
+					<span class="lang_en">Website source code</span>
+					<span class="lang_ru">Исходный код сайта</span>
 				</a>
 				<a href='<!--%c SSR_PRINT_LINK("/askme"); %-->'>
-					<!--%c
-						SSR_EN_PRINTF("Anonymous question");
-						SSR_RU_PRINTF("Анонимный вопрос");
-					%-->
+					<span class="lang_en">Anonymous question</span>
+					<span class="lang_ru">Анонимный вопрос</span>
 				</a>
 				<a href='<!--%c SSR_PRINT_LINK("/mna"); %-->'>
-					<!--%c
-						SSR_EN_PRINTF("Modified nodal analysis (MNA)");
-						SSR_RU_PRINTF("Метод узловых напряжений (МУН)");
-					%-->
+					<span class="lang_en">Modified nodal analysis (MNA)</span>
+					<span class="lang_ru">Метод узловых напряжений (МУН)</span>
 				</a>
 			</div>
 		</p>

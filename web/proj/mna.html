@@ -10,23 +10,17 @@
 <div class="rcontent">
 	<div class="rbox" id="calc-field">
 		<h1>
-			<!--%c
-				SSR_EN_PRINTF("MNA (Modified Nodal Analysis)");
-				SSR_RU_PRINTF("МУП (Метод Узловых Потенциалов)");
-			%-->
+			<span class="lang_en">МУП (Метод Узловых Потенциалов)</span>
+			<span class="lang_ru">MNA (Modified Nodal Analysis)</span>
 		</h1>
 		<hr>
 		<p>
-			<!--%c
-				SSR_EN_PRINTF("Enter circuit information in this format <i>[node1] [node2] [type_name] [value]</i> for each element separated by \",\". Possible element types: <b>u (voltage source)</b>, <b>i (current source)</b>, <b>r (resistor/impedance)</b>. Polarity: u - node1-, node2+; i - node1-, node2+; r - node1+, node2-. Each element must have name (or index)");
-				SSR_RU_PRINTF("Введите цепь в формате <i>[узел1] [узел2] [тип_имя] [значение]</i> для каждого элемента через \",\". Возможные типы элементов: <b>u (источник напряжения)</b>, <b>i (источник тока)</b>, <b>r (резистивный/импедансный элемент)</b>. Полярность: u - узел1-, узел2+; i - узел1-, узел2+; r - узел1+, узел2-. У каждого элемента должно быть имя (либо номер)");
-			%-->
+			<span class="lang_en">Enter circuit information in this format <i>[node1] [node2] [type_name] [value]</i> for each element separated by \",\". Possible element types: <b>u (voltage source)</b>, <b>i (current source)</b>, <b>r (resistor/impedance)</b>. Polarity: u - node1-, node2+; i - node1-, node2+; r - node1+, node2-. Each element must have name (or index)</span>
+			<span class="lang_ru">Введите цепь в формате <i>[узел1] [узел2] [тип_имя] [значение]</i> для каждого элемента через \",\". Возможные типы элементов: <b>u (источник напряжения)</b>, <b>i (источник тока)</b>, <b>r (резистивный/импедансный элемент)</b>. Полярность: u - узел1-, узел2+; i - узел1-, узел2+; r - узел1+, узел2-. У каждого элемента должно быть имя (либо номер)</span>
 		</p>
 		<p>
-			<!--%c
-				SSR_EN_PRINTF("Circuit:");
-				SSR_RU_PRINTF("Цепь:");
-			%-->
+			<span class="lang_en">Circuit:</span>
+			<span class="lang_ru">Цепь:</span>
 			<br>
 			<div class="rcontent-flex" style="display: flex; justify-content: center;">
 				<textarea id="circ-text" style="overflow-y: hidden; width: 80%; max-width: 100%; min-width: 20%; height: 80px;">1 2 u0 3, 2 3 r1 2, 3 1 r3 1+i</textarea><br>
@@ -35,10 +29,8 @@
 		<p>
 			<div style="display: flex; justify-content: center;">
 				<button id="calc">
-					<!--%c
-						SSR_EN_PRINTF("Let's go");
-						SSR_RU_PRINTF("Погнали");
-					%-->
+					<span class="lang_en">Let's go</span>
+					<span class="lang_ru">Погнали</span>
 				</button>
 			</div>
 		</p>
@@ -47,26 +39,20 @@
 		</p>
 		<hr>
 		<p>
-				<!--%c
-					SSR_EN_PRINTF("System of equations:");
-					SSR_RU_PRINTF("Система уравнений:");
-				%-->
-			<br>
-			<em id="system-field"></em>
-			<br>
-				<!--%c
-					SSR_EN_PRINTF("Answers:");
-					SSR_RU_PRINTF("Ответы:");
-				%-->
-			<br>
-			<em id="answer-field"></em>
-			<br>
-				<!--%c
-					SSR_EN_PRINTF("Currents and voltages:");
-					SSR_RU_PRINTF("Токи и напряжения:");
-				%-->
-			<br>
-			<em id="cv-field"></em>
+		<span class="lang_en">System of equations:</span>
+		<span class="lang_ru">Система уравнений:</span>
+		<br>
+		<em id="system-field"></em>
+		<br>
+		<span class="lang_en">Answers:</span>
+		<span class="lang_ru">Ответы:</span>
+		<br>
+		<em id="answer-field"></em>
+		<br>
+		<span class="lang_en">Currents and voltages:</span>
+		<span class="lang_ru">Токи и напряжения:</span>
+		<br>
+		<em id="cv-field"></em>
 		</p>
 	</div>
 </div>
@@ -74,30 +60,30 @@
 <script src="/res/lib/mathjs/math.min.js"></script>
 <script>
 	errors = {
-		'emsg-empty': `<!--%c
-			SSR_EN_PRINTF("Empty input field");
-			SSR_RU_PRINTF("Пустое поле ввода");
-		%-->`,
-		'emsg-args': `<!--%c
-			SSR_EN_PRINTF("{0} arguments for element {1} (need 4)");
-			SSR_RU_PRINTF("{0} аргумент(ов) для элемента {1} (надо 4)");
-		%-->`,
-		'emsg-value-parsing': `<!--%c
-			SSR_EN_PRINTF("Cannot read value for element {0} ({1})?");
-			SSR_RU_PRINTF("Невозможно прочитать значение для элемента {0} ({1})?");
-		%-->`,
-		'emsg-unique': `<!--%c
-			SSR_EN_PRINTF("Name for element {0}{1} is not unique");
-			SSR_RU_PRINTF("Имя для элемента {0}{1} не уникально");
-		%-->`,
-		'emsg-ill-formed': `<!--%c
-			SSR_EN_PRINTF("Not a single solution");
-			SSR_RU_PRINTF("Нет одного решения");
-		%-->`,
-		'emsg-type': `<!--%c
-			SSR_EN_PRINTF("Invalid type in element {0}");
-			SSR_RU_PRINTF("Неправильный тип в элементе {0}");
-		%-->`
+		'emsg-empty': `
+			<span class="lang_en">Empty input field</span>
+			<span class="lang_ru">Пустое поле ввода</span>
+		`,
+		'emsg-args': `
+			<span class="lang_en">{0} arguments for element {1} (need 4)</span>
+			<span class="lang_ru">{0} аргумент(ов) для элемента {1} (надо 4)</span>
+		`,
+		'emsg-value-parsing': `
+			<span class="lang_en">Cannot read value for element {0} ({1})?</span>
+			<span class="lang_ru">Невозможно прочитать значение для элемента {0} ({1})?</span>
+		`,
+		'emsg-unique': `
+			<span class="lang_en">Name for element {0}{1} is not unique</span>
+			<span class="lang_ru">Имя для элемента {0}{1} не уникально</span>
+		`,
+		'emsg-ill-formed': `
+			<span class="lang_en">Not a single solution</span>
+			<span class="lang_ru">Нет одного решения</span>
+		`,
+		'emsg-type': `
+			<span class="lang_en">Invalid type in element {0}</span>
+			<span class="lang_ru">Неправильный тип в элементе {0}</span>
+		`
 	}
 	var calcButton = document.getElementById("calc");
 	var circTextElement = document.getElementById("circ-text");
@@ -119,7 +105,7 @@
 			text = text.replaceAll("{"+i+"}", args[i]);
 		}
 		errorField.innerHTML = text;
-		SetLang();
+		UpdateLanguage();
 		return 1;
 	}
 
@@ -136,8 +122,10 @@
 		for (var i = 0; i < circ.length; i++) {
 			// Disection
 			circ[i] = circ[i].trim().split(' ');
-			if (circ[i].length != 4)
+			if (circ[i].length != 4) {
 				return CALC_ERROR("emsg-args", [circ[i].length, i+1]);
+				alert("!");
+			}
 			// Node names
 			_nodeNames.push(circ[i][0]);
 			_nodeNames.push(circ[i][1]);
