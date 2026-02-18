@@ -1,11 +1,10 @@
-rrwebsite
 credentials.h
 out/
 web/res
 web/res/
-ssr_generated/
+src/ssr_generated/
 build
 build.old
 dbs/
 compile_commands.json
-.cache
+.cache/
