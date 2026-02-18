@@ -7,7 +7,7 @@
 				<span class="lang_ru">Задай вопрос, бро</span>
 		</h2>
 		<div style="display: flex; justify-content: center; gap: 10px;">
-			<input id="askme_question" type="text" autocomplete="off" placeholder='<!--%cSSR_EN_PRINTF("Question text"); SSR_RU_PRINTF("Текст вопроса");%-->'></input>
+			<input id="askme_question" type="text" autocomplete="off" placeholder='Question'></input>
 			<button id="askme_send_btn" onclick="SendAskmeQuestion()">Send</button>
 		</div>
 		<p id="askme_result">
@@ -33,6 +33,7 @@
 <script src="enums.js"></script> <!-- Generated -->
 <script src="utils/binary_rw.js"></script>
 <script>
+	// TODO: change askme_question_el -> askme_question e. t. c
 	const askme_question_el = document.getElementById("askme_question");
 	const askme_result_el = document.getElementById("askme_question");
 	const askme_send_btn_el = document.getElementById("askme_send_btn");
