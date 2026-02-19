@@ -1,19 +1,26 @@
 #define NOB_STRIP_PREFIX
 
-#define SSR_CONVERT_IMPLEMENTATION
-#include "src/ssr_convert.h"
-#undef SSR_CONVERT_IMPLEMENTATION
-
-/* Always last */
 #define NOB_IMPLEMENTATION
 #include "src/nob.h"
 #undef NOB_IMPLEMENTATION
+
+String_Builder page_begin = {0};
+String_Builder page_end = {0};
+
+#define PAGE_CONVERT(dir_) \
+	do { \
+		String_Builder sb = {0}; \
+		sb_append_buf(&sb, page_begin.items, page_begin.count); \
+		NOB_ASSERT(nob_read_entire_file(dir_"/_index.html", &sb)); \
+		sb_append_buf(&sb, page_end.items, page_end.count); \
+		NOB_ASSERT(nob_write_entire_file(dir_"/index.html", sb.items, sb.count)); \
+	} while(0)
 
 #define CC "gcc"
 
 int main(int argc, char** argv) {
 
-	NOB_GO_REBUILD_URSELF_PLUS(argc, argv, "src/ssr_convert.h");
+	NOB_GO_REBUILD_URSELF(argc, argv);
 	
 	Cmd cmd = {0};
 
@@ -29,19 +36,13 @@ int main(int argc, char** argv) {
 		if (!cmd_run(&cmd)) return 1;
 	}
 
-	//if (needs_rebuild1("ssr_convert", "ssr_convert.c")) {
-	//	cmd_append(&cmd, CC, "ssr_convert.c", "-o", "ssr_convert");
-	//	if (!cmd_run(&cmd)) return 1;
-	//}
-
-	if (!nob_mkdir_if_not_exists("src/ssr_generated")) return 1;
-	SSRConvert("web/index.html", "src/ssr_generated/ssr_root.h", "ssr_root");
-	SSRConvert("web/about.html", "src/ssr_generated/ssr_about.h", "ssr_about");
-	SSRConvert("web/page404.html", "src/ssr_generated/ssr_page404.h", "ssr_page404");
-	SSRConvert("web/proj/mna.html", "src/ssr_generated/ssr_proj_mna.h", "ssr_proj_mna");
-	SSRConvert("web/proj/askme.html", "src/ssr_generated/ssr_proj_askme.h", "ssr_proj_askme");
-	SSRConvert("web/templates/default-after.html", "src/ssr_generated/ssr_template_default_after.h", "ssr_template_default_after");
-	SSRConvert("web/templates/default-before.html", "src/ssr_generated/ssr_template_default_before.h", "ssr_template_default_before");
+	NOB_ASSERT(nob_read_entire_file("web/templates/page_begin.html", &page_begin));
+	NOB_ASSERT(nob_read_entire_file("web/templates/page_end.html", &page_end));
+	PAGE_CONVERT("web");
+	PAGE_CONVERT("web/about");
+	PAGE_CONVERT("web/404");
+	PAGE_CONVERT("web/mna");
+	PAGE_CONVERT("web/askme");
 	
 	cmd_append(&cmd, CC, "src/main.c", "-o", "out/r4web");
 	cmd_append(&cmd, "out/mongoose.o");

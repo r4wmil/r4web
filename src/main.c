@@ -37,18 +37,6 @@ size_t active_conns = 0;
 
 // --- SSR ---
 
-#define SSR_IMPLEMENTATION
-#include "ssr.h"
-#undef SSR_IMPLEMENTATION
-
-#include "ssr_generated/ssr_template_default_before.h"
-#include "ssr_generated/ssr_template_default_after.h"
-#include "ssr_generated/ssr_root.h"
-#include "ssr_generated/ssr_about.h"
-#include "ssr_generated/ssr_page404.h"
-#include "ssr_generated/ssr_proj_mna.h"
-#include "ssr_generated/ssr_proj_askme.h"
-
 #define VISITORS_IMPLEMENTATION
 #include "visitors.h"
 #undef VISITORS_IMPLEMENTATION
@@ -88,8 +76,6 @@ void a_parse_flags(int argc, char** argv) {
 
 // -- HTTP --
 
-typedef void (*SSRFuncPtr)(Nob_String_Builder*, SSRData);
-
 char URICompare(struct mg_str uri, struct mg_str exp) {
 	if (uri.len < exp.len) return 0;
 	if (strncmp(uri.buf, exp.buf, exp.len) != 0) return 0;
@@ -97,17 +83,6 @@ char URICompare(struct mg_str uri, struct mg_str exp) {
 		if (uri.buf[i] != '/') return 0;
 	}
 	return 1;
-}
-
-SSRFuncPtr HTTPServePage(struct mg_connection* c, struct mg_http_message* hm) {
-	SSR_MATCH("/", ssr_root);
-	SSR_MATCH("/home", ssr_root);
-	SSR_MATCH("/about", ssr_about);
-	SSR_MATCH("/mna", ssr_proj_mna);
-	SSR_MATCH("/askme", ssr_proj_askme);
-	for (size_t i = 0; i < hm->uri.len; i++)
-		if (hm->uri.buf[i] == '.') return NULL;
-	return ssr_page404;
 }
 
 char HTTPIsLangRu(struct mg_http_message* hm) {
@@ -197,26 +172,9 @@ void HandleHTTPMessage(struct mg_connection* c, void* ev_data) {
 			return;
 		}
 
-		SSRFuncPtr ssr_func_ptr = HTTPServePage(c, hm);
-		if (!ssr_func_ptr) {
-			struct mg_http_serve_opts opts = { .root_dir = aconf.web_dir };
-			mg_http_serve_dir(c, hm, &opts);
-			return;
-		}
-
-		SSRData ssr_data = {0};
-		ssr_data.hm = hm;
-		ssr_data.lang_is_ru = HTTPIsLangRu(hm);
-		ssr_data.active_conns = active_conns;
-
-		nob_da_reserve(&http_page_string, 8192);
-
-		(*ssr_func_ptr)(&http_page_string, ssr_data);
-
-		nob_da_append(&http_page_string, '\0');
-		nob_da_append(&http_headers_string, '\0');
-
-		mg_http_reply(c, 200, http_headers_string.items, http_page_string.items);
+		struct mg_http_serve_opts opts = { .root_dir = aconf.web_dir };
+		mg_http_serve_dir(c, hm, &opts);
+		return;
 	}
 }
 
