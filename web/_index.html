@@ -103,11 +103,10 @@
 <div class="rr-welcome-pane">
 	<div class="rwelcome">
 		<span class="lang_en"><span>w</span><span>e</span><span>l</span><span>c</span><span>o</span><span>m</span><span>e</span></span>
-		<span class="lang_ru"><span>в</span><span>е</span><span>л</span><span>к</span><span>а</span><span>м</span><span></span></span>
+		<span class="lang_ru"><span>п</span><span>р</span><span>и</span><span>в</span><span>е</span><span>т</span><span></span></span>
 	</div>
 	<div class="rsplash">
-		<span>
-			Enjoying the sunset. We shouldn't, but what can we do anyway?
+		<span id="rsplash">
 		</span>
 	</div>
 </div>
@@ -154,3 +153,13 @@
 		</p>
 	</div>
 </div>
+<script>
+	var splashes = null;
+	fetch('/splashes.txt', { method: 'GET' })
+		.then(resp => resp.text())
+		.then(txt => SetSplash(txt));
+	function SetSplash(txt) {
+		splashes = txt.trim().split("\n");
+		rsplash.textContent = splashes[Math.floor(Math.random() * splashes.length)];
+	}
+</script>
