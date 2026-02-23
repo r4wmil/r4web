@@ -16,6 +16,11 @@
 			document.querySelectorAll(selector).forEach(tag => tag.style.display = (state ? 'unset' : 'none'));
 		}
 		function UpdateLanguage() {
+			page_language = localStorage.getItem("language");
+			if (page_language === null) {
+				page_language = navigator.language.startsWith("ru") ? "ru" : "en";
+				page_language = page_language ? "ru" : "en";
+			}
 			if (page_language == "en") {
 				QuerySetVisible(".lang_en", 1);
 				QuerySetVisible(".lang_ru", 0);
@@ -26,6 +31,7 @@
 		}
 		function SetLanguage(new_page_language) {
 			page_language = new_page_language;
+			localStorage.setItem("language", page_language);
 			UpdateLanguage();
 		}
 		UpdateLanguage();
