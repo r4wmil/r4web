@@ -1,7 +1,5 @@
 credentials.h
 out/
-web/res
-web/res/
 src/ssr_generated/
 build
 build.old
@@ -9,3 +7,6 @@ dbs/
 compile_commands.json
 .cache/
 **/index.html
+web/res
+web/res/
+web/enums.js

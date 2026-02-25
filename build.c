@@ -4,6 +4,10 @@
 #include "src/nob.h"
 #undef NOB_IMPLEMENTATION
 
+#define ENUMS_IMPLEMENTATION
+#include "src/enums.h"
+#undef ENUMS_IMPLEMENTATION
+
 String_Builder page_begin = {0};
 String_Builder page_end = {0};
 
@@ -43,6 +47,8 @@ int main(int argc, char** argv) {
 	PAGE_CONVERT("web/404");
 	PAGE_CONVERT("web/mna");
 	PAGE_CONVERT("web/askme");
+	Nob_String_Builder enums_js = enums_generate_js();
+	NOB_ASSERT(nob_write_entire_file("web/enums.js", enums_js.items, enums_js.count)); \
 	
 	cmd_append(&cmd, CC, "src/main.c", "-o", "out/r4web");
 	cmd_append(&cmd, "out/mongoose.o");

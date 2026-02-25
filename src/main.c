@@ -166,12 +166,6 @@ void HandleHTTPMessage(struct mg_connection* c, void* ev_data) {
 	}
 
 	if (!mg_strcmp(hm->method, mg_str("GET"))) {
-
-		if (!mg_strcmp(hm->uri, mg_str("/enums.js"))) {
-			mg_http_reply(c, 200, "", enums_js.items);
-			return;
-		}
-
 		struct mg_http_serve_opts opts = { .root_dir = aconf.web_dir };
 		mg_http_serve_dir(c, hm, &opts);
 		return;
@@ -218,7 +212,6 @@ char is_working = 1;
 void app_terminate(int sig) { is_working = 0; }
 
 int main(int argc, char* argv[]) {
-	EnumsGenerateJS();
 	nob_mkdir_if_not_exists("dbs");
 	nob_mkdir_if_not_exists("dbs/askme");
 

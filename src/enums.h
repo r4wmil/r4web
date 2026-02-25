@@ -29,9 +29,7 @@ extern const char *SME_NAMES[];
 
 // --- JS ---
 
-extern Nob_String_Builder enums_js;
-
-void GameMessageTypesGenerateJS();
+Nob_String_Builder enums_generate_js();
 
 #endif /* ENUMS_H */
 
@@ -45,8 +43,6 @@ const char *CME_NAMES[] = { CME };
 const char *SME_NAMES[] = { SME };
 #undef X
 
-Nob_String_Builder enums_js;
-
 #define JS_ENUM_GENERATE(name_) \
 	do { \
 		nob_sb_append_cstr(&enums_js, "const "#name_" = {\n"); \
@@ -56,11 +52,13 @@ Nob_String_Builder enums_js;
 		nob_sb_append_cstr(&enums_js, "};\n"); \
 	} while(0);
 
-void EnumsGenerateJS() {
+Nob_String_Builder enums_generate_js() {
+	Nob_String_Builder enums_js = {0};
 	JS_ENUM_GENERATE(CME);
 	JS_ENUM_GENERATE(SME);
 	//nob_sb_appendf(&enums_js, "const debug = %s;\n", game.debug ? "true" : "false"); // TODO: by flag
-	nob_sb_append_null(&enums_js);
+	//nob_sb_append_null(&enums_js);
+	return enums_js;
 }
 
 #endif /* ENUMS_IMPLEMENTATION */
