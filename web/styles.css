@@ -46,13 +46,13 @@ body nav * {
 	align-items: center;
 	margin: 0 10px 0 10px;
 }
-nav .rr-logo {
+nav .r_logo {
 	font-size: 30px;
 	transform: skew(-35deg);
 	font-family: LibertinusSerif;
 	z-index: 1000;
 }
-.rr-menu-link a {
+.r_menu_link a {
 	text-decoration: underline;
 	color: inherit;
 	color: var(--primary);
@@ -61,21 +61,21 @@ nav .rr-logo {
 	font-family: NotoSans;
 	font-size: 20px;
 }
-.rr-horizontal-menu {
+.r_hmenu {
 	display: flex;
 }
-.rr-menu-toggle {
+.r_menu_toggle {
 	display: none;
 	font-size: 18px;
 	font-family: NotoSans;
 	z-index: 1000;
 }
-.rr-menu-toggle label {
+.r_menu_toggle label {
 	cursor: pointer;
 	-webkit-user-select: none;
 }
-#rr-menu-toggle { display: none; }
-.rr-menu-overlay {
+#r_menu_toggle { display: none; }
+.r_menu_overlay {
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
@@ -91,16 +91,16 @@ nav .rr-logo {
 	transition: .3s;
 	background: rgba(0,0,0,0.8);
 }
-#rr-menu-toggle:checked ~ .rr-menu-overlay {
+#r_menu_toggle:checked ~ .r_menu_overlay {
 	opacity: 1;
 	pointer-events:auto;
 }
 @media (max-width: 600px) {
-	.rr-menu-overlay { display: flex !important; }
-	.rr-menu-toggle { display: flex; }
-	.rr-horizontal-menu { display: none; }
+	.r_menu_overlay { display: flex !important; }
+	.r_menu_toggle { display: flex; }
+	.r_hmenu { display: none; }
 }
-.rr-menu-overlay { display: none; }
+.r_menu_overlay { display: none; }
 /* --- FOOTER --- */
 footer {
 	display: flex;
@@ -115,24 +115,24 @@ footer {
 	box-shadow: var(--shadow-s);
 	background-color: var(--bg);
 }
-.rr-footer-language a {
+.r_footer_lang a {
 	text-decoration: underline;
 	color: inherit;
 	color: var(--primary);
 	user-select: none;
 	-webkit-user-select: none;
 }
-.rr-footer-language a:hover {
+.r_footer_lang a:hover {
 	text-decoration: none;
 	cursor: pointer;
 }
-.rr-footer-copyright {
+.r_footer_lang {
 	z-index: 1; /* not working */
 	transform: skew(-15deg);
 	position: relative;
 }
 /* --- CONTENT --- */
-.rbox {
+.r_box {
 	width: clamp(50%, 600px, 85%);
 	height: 100%;
 	font-family: NotoSans;
@@ -152,8 +152,8 @@ footer {
 	margin: 10px;
 }
 /* --- Text --- */
-.rbox hr { border-color: var(--text-muted); }
-.rcontent {
+.r_box hr { border-color: var(--text-muted); }
+.r_content {
 	padding-top: 40px;
 	display: flex;
 	flex-flow: row;
@@ -165,28 +165,28 @@ footer {
 	box-sizing: border-box; /* No shrinking */
 	overflow: hidden;
 }
-.rbox hr { border-color: var(--text-muted); }
-.rbox h1 {
+.r_box hr { border-color: var(--text-muted); }
+.r_box h1 {
 	font-size: 2.5rem;
 	margin-bottom: 1rem;
 	color: var(--text);
 }
-.rbox h2 {
+.r_box h2 {
 	font-size: 2rem;
 	margin-bottom: 1rem;
 	color: var(--text);
 }
-.rbox p {
+.r_box p {
 	font-size: 1.1rem;
 	margin-bottom: 1rem;
 	color: var(--text);
 }
-.rbox a {
+.r_box a {
 	font-size: 1rem;
 	color: var(--primary);
 }
 /* --- Button --- */
-.rbox button {
+.r_box button {
 	font-size: 1rem;
 	padding: 0.2rem 0.5rem;
 	background: var(--bg-light);	
@@ -196,15 +196,15 @@ footer {
 	color: var(--text);
 	transition: var(--ease);
 }
-.rbox button:hover {
+.r_box button:hover {
 	box-shadow: var(--shadow-l);
 }
-.rbox button:active {
+.r_box button:active {
 	box-shadow: var(--shadow-s-in);
 	transform: scale(0.98);
 }
 /* --- Textarea --- */
-.rbox textarea {
+.r_box textarea {
 	font-size: 1rem;
 	padding: 0.2rem 0.5rem;
 	color: var(--text);
@@ -214,7 +214,7 @@ footer {
 	border-radius: 3px;
 	transition: var(--ease);
 }
-.rbox textarea:focus {
+.r_box textarea:focus {
 	outline: none;
 	box-shadow: var(--shadow-m-in);
 }
