@@ -1,0 +1,26 @@
+<div class="r_content">
+	<div class="r_box">
+		<h2>
+			<span class="lang_en">Schedule ETU "LETI"</span>
+			<span class="lang_ru">Расписание ЛЭТИ</span>
+		</h2>
+	</div>
+</div>
+<script src="/enums.js"></script>
+<script src="/utils/binary_rw.js"></script>
+<script>
+	// Run when page loads
+	window.addEventListener('load', function() {
+		fetch('https://digital.etu.ru/api/schedule/objects/publicated?subjectType=%D0%9B%D0%B5%D0%BA&subjectType=%D0%9F%D1%80&subjectType=%D0%9B%D0%B0%D0%B1&subjectType=%D0%9A%D0%9F&subjectType=%D0%9A%D0%A0&subjectType=%D0%94%D0%BE%D0%B1&subjectType=%D0%9C%D0%AD%D0%BA&subjectType=%D0%9F%D1%80%D0%B0%D0%BA&subjectType=%D0%A2%D0%B5%D1%81%D1%82&withSubjectCode=true&withURL=true&noEmptyGroups=true&teacherRequired=true&anyTeacherId=666')
+			.then(response => {
+				if (!response.ok) { throw new Error('Network response was not ok'); }
+				return response.json();
+			})
+			.then(data => {
+				alert(data);
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
+	});
+</script>

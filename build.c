@@ -47,6 +47,7 @@ int main(int argc, char** argv) {
 	PAGE_CONVERT("web/404");
 	PAGE_CONVERT("web/mna");
 	PAGE_CONVERT("web/askme");
+	PAGE_CONVERT("web/letisch");
 	Nob_String_Builder enums_js = enums_generate_js();
 	NOB_ASSERT(nob_write_entire_file("web/enums.js", enums_js.items, enums_js.count)); \
 	
