@@ -21,6 +21,10 @@
 #include "binary_rw.h"
 #undef BINARY_RW_IMPLEMENTATION
 
+#define LETISCH_IMPLEMENTATION
+#include "letisch.h"
+#undef LETISCH_IMPLEMENTATION
+
 // --- UTILS ---
 
 void RandomBytes(void *buf, size_t len) {
@@ -166,6 +170,10 @@ void HandleHTTPMessage(struct mg_connection* c, void* ev_data) {
 	}
 
 	if (!mg_strcmp(hm->method, mg_str("GET"))) {
+		if (!mg_strcmp(hm->uri, mg_str("/letisch/teacher"))) {
+			LSFetchTeacherSchedule(c);
+			return;
+		}
 		struct mg_http_serve_opts opts = { .root_dir = aconf.web_dir };
 		mg_http_serve_dir(c, hm, &opts);
 		return;
@@ -225,6 +233,7 @@ int main(int argc, char* argv[]) {
 	mg_mgr_init(&mgr);
 	char addrstr[32];
 	snprintf(addrstr, sizeof(addrstr), "http://0.0.0.0:%d", aconf.port);
+	LSConnect(&mgr);
 	mg_http_listen(&mgr, addrstr, EventHandler, NULL);
 
 	signal(SIGINT, app_terminate);
