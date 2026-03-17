@@ -52,6 +52,7 @@ int main(int argc, char** argv) {
 	NOB_ASSERT(nob_write_entire_file("web/enums.js", enums_js.items, enums_js.count)); \
 	
 	cmd_append(&cmd, CC, "src/main.c", "-o", "out/r4web");
+	if (argc >= 2 && argv[1][0] == 's') { cmd_append(&cmd, "-fsanitize=address"); }
 	cmd_append(&cmd, "out/mongoose.o");
 	cmd_append(&cmd, "-I./src");
 	cmd_append(&cmd, "-I./src/3rd_party");
