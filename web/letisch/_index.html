@@ -72,8 +72,9 @@
 						var lesson = lessons[j]["lesson"];
 						var lessonId = GetLessonId(lesson);
 						if (!lesson_info[lessonId]) {
-							lesson_info[lessonId] = {"shown":0}
+							lesson_info[lessonId] = {"shown":0,"groups":{}}
 						}
+						lesson_info[lessonId].groups[lesson.groupNumber] = 1;
 						var weekDay = lesson.auditoriumReservation.reservationTime.weekDay;
 						lesson_arr[weekDay].push(lesson);
 					}
@@ -84,8 +85,9 @@
 					for (let j = 0; j < lesson_arr[key].length; j++) {
 						var lesson = lesson_arr[key][j];
 						var lessonId = GetLessonId(lesson);
-						if (lesson_info[lessonId].shown == 1) { continue; }
-						lesson_info[lessonId].shown = 1;
+						var lessonInfo = lesson_info[lessonId];
+						if (lessonInfo.shown == 1) { continue; }
+						lessonInfo.shown = 1;
 						var startTime = lesson.auditoriumReservation.reservationTime.startTime;
 						var endTime = lesson.auditoriumReservation.reservationTime.endTime;
 						s += `${What2Time(startTime)} - ${What2Time(endTime)}`;
@@ -99,6 +101,8 @@
 						if (lesson.secondTeacher) {
 							s += `, ${lesson.secondTeacher.initials}`;
 						}
+						s += "<br>"
+						s += `Группы: ${Object.keys(lessonInfo.groups)}, `;
 						s += "<br>"
 						s += "<br>"
 					}
