@@ -51,6 +51,13 @@
 		}
 		return '??:??';
 	}
+	function GetLessonId(lesson) {
+		return ""
+			+ lesson.auditoriumReservation.reservationTime.weekDay
+			+ lesson.auditoriumReservation.reservationTime.startTime
+			+ lesson.teacher.id
+			+ lesson.auditoriumReservation.auditoriumNumber;
+	}
 	function SendRequest() {
 		fetch('/letisch/teacher')
 			.then(resp => resp.json())
@@ -58,10 +65,15 @@
 				//alert(JSON.stringify(buf));
 				var s = '';
 				var lesson_arr = {'MON':[],'TUE':[],'WED':[],'THU':[],'FRI':[],'SAT':[],'SUN':[]};
+				var lesson_info = {};
 				for (let i = 0; i < buf.length; i++) {
 					var lessons = buf[i]["scheduleObjects"];
 					for (let j = 0; j < lessons.length; j++) {
 						var lesson = lessons[j]["lesson"];
+						var lessonId = GetLessonId(lesson);
+						if (!lesson_info[lessonId]) {
+							lesson_info[lessonId] = {"shown":0}
+						}
 						var weekDay = lesson.auditoriumReservation.reservationTime.weekDay;
 						lesson_arr[weekDay].push(lesson);
 					}
@@ -71,6 +83,9 @@
 					s += `<h3>${WeekDayToRu(key)}: </h3>`;
 					for (let j = 0; j < lesson_arr[key].length; j++) {
 						var lesson = lesson_arr[key][j];
+						var lessonId = GetLessonId(lesson);
+						if (lesson_info[lessonId].shown == 1) { continue; }
+						lesson_info[lessonId].shown = 1;
 						var startTime = lesson.auditoriumReservation.reservationTime.startTime;
 						var endTime = lesson.auditoriumReservation.reservationTime.endTime;
 						s += `${What2Time(startTime)} - ${What2Time(endTime)}`;
