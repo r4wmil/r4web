@@ -42,9 +42,9 @@
 	function WeekDayToRu(weekDay) {
 		switch (weekDay) {
 			case 'MON': return 'Понедельник'; break;
-			case 'THU': return 'Вторник'; break;
+			case 'TUE': return 'Вторник'; break;
 			case 'WED': return 'Среда'; break;
-			case 'TUE': return 'Четверг'; break;
+			case 'THU': return 'Четверг'; break;
 			case 'FRI': return 'Пятница'; break;
 			case 'SAT': return 'Суббота'; break;
 			case 'SUN': return 'Воскресенье'; break;
@@ -57,24 +57,34 @@
 			.then(buf => {
 				//alert(JSON.stringify(buf));
 				var s = '';
-				for (var i = 0; i < buf.length; i++) {
+				var lesson_arr = {'MON':[],'TUE':[],'WED':[],'THU':[],'FRI':[],'SAT':[],'SUN':[]};
+				for (let i = 0; i < buf.length; i++) {
 					var lessons = buf[i]["scheduleObjects"];
-					for (var j = 0; j < lessons.length; j++) {
+					for (let j = 0; j < lessons.length; j++) {
 						var lesson = lessons[j]["lesson"];
+						var weekDay = lesson.auditoriumReservation.reservationTime.weekDay;
+						lesson_arr[weekDay].push(lesson);
+					}
+				}
+				for (let key in lesson_arr) {
+					if (lesson_arr[key].length == 0) { continue; }
+					s += `<h3>${WeekDayToRu(key)}: </h3>`;
+					for (let j = 0; j < lesson_arr[key].length; j++) {
+						var lesson = lesson_arr[key][j];
 						var startTime = lesson.auditoriumReservation.reservationTime.startTime;
 						var endTime = lesson.auditoriumReservation.reservationTime.endTime;
-						s += `${WeekDayToRu(lesson.auditoriumReservation.reservationTime.weekDay)}: `;
 						s += `${What2Time(startTime)} - ${What2Time(endTime)}`;
 						s += "<br>"
 						s += `<b>${lesson.subject.subjectType}:</b> `;
 						s += `${lesson.subject.shortTitle} `;
 						s += `(${lesson.subject.title}) `;
 						s += "<br>"
-						s += lesson.auditoriumReservation.auditoriumNumber + " ";
-						s += lesson.teacher.initials + " ";
+						s += `Ауд. ${lesson.auditoriumReservation.auditoriumNumber}, `;
+						s += lesson.teacher.initials;
 						if (lesson.secondTeacher) {
-							s += lesson.secondTeacher.initials + " ";
+							s += `, ${lesson.secondTeacher.initials}`;
 						}
+						s += "<br>"
 						s += "<br>"
 					}
 				}
