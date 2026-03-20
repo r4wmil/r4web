@@ -4,23 +4,81 @@
 			<span class="lang_en">Schedule ETU "LETI"</span>
 			<span class="lang_ru">Расписание ЛЭТИ</span>
 		</h2>
+		<p>
+			<p>Преподаватель: Данилин А.А.</p>
+			<br>
+			<span id="sch_dump">
+
+			</span>
+		</p>
 	</div>
 </div>
 <script src="/enums.js"></script>
 <script src="/utils/binary_rw.js"></script>
 <script>
 	// Run when page loads
+	function What2Time(timeValue) {
+		if (timeValue < 1000) {
+			switch (timeValue % 10) {
+				case 0: return '8:00'; break;
+				case 1: return '9:50'; break;
+				case 2: return '11:40'; break;
+				case 3: return '13:40'; break;
+				case 4: return '15:30'; break;
+				case 5: return '17:20'; break;
+			}
+		} else {
+			switch (timeValue % 10) {
+				case 0: return '9:30'; break;
+				case 1: return '11:20'; break;
+				case 2: return '13:10'; break;
+				case 3: return '15:10'; break;
+				case 4: return '17:00'; break;
+				case 5: return '18:50'; break;
+			}
+		}
+		return '??:??';
+	}
+	function WeekDayToRu(weekDay) {
+		switch (weekDay) {
+			case 'MON': return 'Понедельник'; break;
+			case 'THU': return 'Вторник'; break;
+			case 'WED': return 'Среда'; break;
+			case 'TUE': return 'Четверг'; break;
+			case 'FRI': return 'Пятница'; break;
+			case 'SAT': return 'Суббота'; break;
+			case 'SUN': return 'Воскресенье'; break;
+		}
+		return '??:??';
+	}
 	function SendRequest() {
 		fetch('/letisch/teacher')
 			.then(resp => resp.json())
 			.then(buf => {
 				//alert(JSON.stringify(buf));
+				var s = '';
 				for (var i = 0; i < buf.length; i++) {
 					var lessons = buf[i]["scheduleObjects"];
 					for (var j = 0; j < lessons.length; j++) {
-						alert(JSON.stringify(lessons[j]));
+						var lesson = lessons[j]["lesson"];
+						var startTime = lesson.auditoriumReservation.reservationTime.startTime;
+						var endTime = lesson.auditoriumReservation.reservationTime.endTime;
+						s += `${WeekDayToRu(lesson.auditoriumReservation.reservationTime.weekDay)}: `;
+						s += `${What2Time(startTime)} - ${What2Time(endTime)}`;
+						s += "<br>"
+						s += `<b>${lesson.subject.subjectType}:</b> `;
+						s += `${lesson.subject.shortTitle} `;
+						s += `(${lesson.subject.title}) `;
+						s += "<br>"
+						s += lesson.auditoriumReservation.auditoriumNumber + " ";
+						s += lesson.teacher.initials + " ";
+						if (lesson.secondTeacher) {
+							s += lesson.secondTeacher.initials + " ";
+						}
+						s += "<br>"
 					}
 				}
+				sch_dump.innerHTML = s;
 			});
 	}
 	window.addEventListener('load', function() {
