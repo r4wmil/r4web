@@ -17,7 +17,7 @@ typedef struct LSMgr {
 extern LSMgr lsmgr;
 
 void LSConnect(struct mg_mgr* mgr);
-void LSFetchTeacherSchedule(struct mg_connection* c);
+void LSFetchTeacherSchedule(struct mg_connection* c, char* id);
 void LSHandler(struct mg_connection* c, int ev, void* ev_data);
 
 #endif /* LETISCH_H_ */
@@ -30,15 +30,15 @@ void LSConnect(struct mg_mgr* mgr) {
 	lsmgr.conn = mg_http_connect(mgr, "https://digital.etu.ru", LSHandler, NULL);
 }
 
-void LSFetchTeacherSchedule(struct mg_connection* c) {
+void LSFetchTeacherSchedule(struct mg_connection* c, char* id) {
 	lsmgr.queue.buf[lsmgr.queue.tail] = c;
 	lsmgr.queue.tail = (lsmgr.queue.tail + 1) % LS_QUEUE_MAX;
 	char* msg = nob_temp_sprintf(
-			"GET %s HTTP/1.1\r\n"
+			"GET %s%s HTTP/1.1\r\n"
 			"Host: digital.etu.ru\r\n"
 			"User-Agent: curl/8.19.0\r\n"
 			"Accept: */*\r\n\r\n",
-			"/api/schedule/objects/publicated?subjectType=%D0%9B%D0%B5%D0%BA&subjectType=%D0%9F%D1%80&subjectType=%D0%9B%D0%B0%D0%B1&subjectType=%D0%9A%D0%9F&subjectType=%D0%9A%D0%A0&subjectType=%D0%94%D0%BE%D0%B1&subjectType=%D0%9C%D0%AD%D0%BA&subjectType=%D0%9F%D1%80%D0%B0%D0%BA&subjectType=%D0%A2%D0%B5%D1%81%D1%82&withSubjectCode=true&withURL=true&noEmptyGroups=true&teacherRequired=true&withFaculty=true&anyTeacherId=666");
+			"/api/schedule/objects/publicated?subjectType=%D0%9B%D0%B5%D0%BA&subjectType=%D0%9F%D1%80&subjectType=%D0%9B%D0%B0%D0%B1&subjectType=%D0%9A%D0%9F&subjectType=%D0%9A%D0%A0&subjectType=%D0%94%D0%BE%D0%B1&subjectType=%D0%9C%D0%AD%D0%BA&subjectType=%D0%9F%D1%80%D0%B0%D0%BA&subjectType=%D0%A2%D0%B5%D1%81%D1%82&withSubjectCode=true&withURL=true&noEmptyGroups=true&teacherRequired=true&withFaculty=true&anyTeacherId=", id);
 	nob_temp_reset();
 	mg_send(lsmgr.conn, msg, strlen(msg));
 }

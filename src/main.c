@@ -171,7 +171,12 @@ void HandleHTTPMessage(struct mg_connection* c, void* ev_data) {
 
 	if (!mg_strcmp(hm->method, mg_str("GET"))) {
 		if (!mg_strcmp(hm->uri, mg_str("/letisch/teacher"))) {
-			LSFetchTeacherSchedule(c);
+			char id[32];
+			MG_INFO(("teacher"));
+			if (mg_http_get_var(&hm->query, "id", id, 32) > 0) {
+				MG_INFO(("teacher id=%s", id));
+				LSFetchTeacherSchedule(c, id);
+			}
 			return;
 		}
 		struct mg_http_serve_opts opts = { .root_dir = aconf.web_dir };
