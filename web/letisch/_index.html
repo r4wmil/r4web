@@ -1,11 +1,14 @@
 <div class="r_content">
 	<div class="r_box">
+		<select id="teachers_dropdown">
+		</select>
 		<h2>
 			<span class="lang_en">Schedule ETU "LETI"</span>
 			<span class="lang_ru">Расписание ЛЭТИ</span>
 		</h2>
-		<p>
+		<p>Преподаватели: <span id="sch_teacher_list"></span></p>
 		<p>Преподаватель: <span id="sch_teacher"></span></p>
+		<p>
 			<br>
 			<span id="sch_dump">
 
@@ -58,6 +61,20 @@
 			+ lesson.teacher.id
 			+ lesson.auditoriumReservation.auditoriumNumber;
 	}
+	function GetTeacherList() {
+		fetch(`/letisch/teacher_list`)
+			.then(resp => resp.json())
+			.then(buf => {
+				names = ""
+				for (let i = 0; i < buf.length; i++) {
+					var teacher = buf[i];
+					teachers_dropdown.innerHTML += `<option value="1">${teacher.initials}</option>`;
+					names += teacher.initials + ", ";
+				}
+				sch_teacher_list.innerHTML = names;
+			});
+	}
+	GetTeacherList();
 	function SendRequest(teacherId) {
 		fetch(`/letisch/teacher?id=${teacherId}`)
 			.then(resp => resp.json())
