@@ -1,12 +1,13 @@
 <div class="r_content">
 	<div class="r_box">
+		<select id="depts_dropdown">
+		</select>
 		<select id="teachers_dropdown">
 		</select>
 		<h2>
 			<span class="lang_en">Schedule ETU "LETI"</span>
 			<span class="lang_ru">Расписание ЛЭТИ</span>
 		</h2>
-		<p>Преподаватели: <span id="sch_teacher_list"></span></p>
 		<p>Преподаватель: <span id="sch_teacher"></span></p>
 		<p>
 			<br>
@@ -61,20 +62,39 @@
 			+ lesson.teacher.id
 			+ lesson.auditoriumReservation.auditoriumNumber;
 	}
-	function GetTeacherList() {
-		fetch(`/letisch/teacher_list`)
+	function InitDeptList() {
+		depts_dropdown.innerHTML += `<option value="-1">(не выбран)</option>`;
+
+	}
+	function GetDeptList() {
+		fetch(`/letisch/depts`)
 			.then(resp => resp.json())
 			.then(buf => {
-				names = ""
+				depts_dropdown.innerHTML = "";
+				depts_dropdown.innerHTML += `<option value="-1">(не выбран)</option>`;
 				for (let i = 0; i < buf.length; i++) {
-					var teacher = buf[i];
-					teachers_dropdown.innerHTML += `<option value="1">${teacher.initials}</option>`;
-					names += teacher.initials + ", ";
+					var dept = buf[i];
+					if (dept.title.length == 0) { continue; }
+					if (!dept.faculty) { continue; }
+					depts_dropdown.innerHTML += `<option value="${dept.id}">${dept.title} (${dept.faculty.title})</option>`;
 				}
-				sch_teacher_list.innerHTML = names;
 			});
 	}
-	GetTeacherList();
+	var teacher_names = [];
+	function GetTeacherList(dept_id) {
+		teacher_names = [];
+		fetch(`/letisch/teacher_list?dept_id=${dept_id}`)
+			.then(resp => resp.json())
+			.then(buf => {
+				teachers_dropdown.innerHTML = "";
+				teachers_dropdown.innerHTML += `<option value="-1">(не выбран)</option>`;
+				for (let i = 0; i < buf.length; i++) {
+					var teacher = buf[i];
+					teachers_dropdown.innerHTML += `<option value="${teacher.id}">${teacher.initials}</option>`;
+					teacher_names.push(`${teacher.surname} ${teacher.name} ${teacher.midname}`);
+				}
+			});
+	}
 	function SendRequest(teacherId) {
 		fetch(`/letisch/teacher?id=${teacherId}`)
 			.then(resp => resp.json())
@@ -83,6 +103,7 @@
 				var s = '';
 				var lesson_arr = {'MON':[],'TUE':[],'WED':[],'THU':[],'FRI':[],'SAT':[],'SUN':[]};
 				var lesson_info = {};
+				var teacher_name = "";
 				for (let i = 0; i < buf.length; i++) {
 					var lessons = buf[i]["scheduleObjects"];
 					for (let j = 0; j < lessons.length; j++) {
@@ -130,7 +151,16 @@
 				sch_dump.innerHTML = s;
 			});
 	}
+	depts_dropdown.addEventListener('change', function () {
+		if (this.value == -1) { return; }
+		GetTeacherList(this.value);
+	});
+	teachers_dropdown.addEventListener('change', function () {
+		if (this.value == -1) { return; }
+		SendRequest(this.value);
+		sch_teacher.textContent = teacher_names[this.selectedIndex - 1];
+	});
 	window.addEventListener('load', function() {
-		SendRequest(740);
+		GetDeptList();
 	});
 </script>

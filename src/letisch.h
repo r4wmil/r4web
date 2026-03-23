@@ -18,7 +18,8 @@ typedef struct LSMgr {
 extern LSMgr lsmgr;
 
 void LSConnect(struct mg_mgr* mgr);
-void LSFetchTeacherList(struct mg_connection* c);
+void LSFetchDepts(struct mg_connection* c);
+void LSFetchTeacherList(struct mg_connection* c, char* dept_id);
 void LSFetchTeacherSchedule(struct mg_connection* c, char* id);
 void LSHandler(struct mg_connection* c, int ev, void* ev_data);
 
@@ -34,6 +35,19 @@ void LSConnect(struct mg_mgr* mgr) {
 
 void LSDisconnect() { lsmgr.is_closing = true; }
 
+void LSFetchDepts(struct mg_connection* c) {
+	lsmgr.queue.buf[lsmgr.queue.tail] = c;
+	lsmgr.queue.tail = (lsmgr.queue.tail + 1) % LS_QUEUE_MAX;
+	char* msg = nob_temp_sprintf(
+			"GET %s HTTP/1.1\r\n"
+			"Host: digital.etu.ru\r\n"
+			"User-Agent: curl/8.19.0\r\n"
+			"Accept: */*\r\n\r\n",
+			"/api/general/dicts/departments");
+	nob_temp_reset();
+	mg_send(lsmgr.conn, msg, strlen(msg));
+}
+
 void LSFetchTeacherSchedule(struct mg_connection* c, char* id) {
 	lsmgr.queue.buf[lsmgr.queue.tail] = c;
 	lsmgr.queue.tail = (lsmgr.queue.tail + 1) % LS_QUEUE_MAX;
@@ -47,7 +61,7 @@ void LSFetchTeacherSchedule(struct mg_connection* c, char* id) {
 	mg_send(lsmgr.conn, msg, strlen(msg));
 }
 
-void LSFetchTeacherList(struct mg_connection* c) {
+void LSFetchTeacherList(struct mg_connection* c, char* dept_id) {
 	lsmgr.queue.buf[lsmgr.queue.tail] = c;
 	lsmgr.queue.tail = (lsmgr.queue.tail + 1) % LS_QUEUE_MAX;
 	char* msg = nob_temp_sprintf(
@@ -55,7 +69,7 @@ void LSFetchTeacherList(struct mg_connection* c) {
 			"Host: digital.etu.ru\r\n"
 			"User-Agent: curl/8.19.0\r\n"
 			"Accept: */*\r\n\r\n",
-			"/api/general/dicts/teachers?forLastPublicatedSchedule=true");
+			"/api/general/dicts/teachers?forLastPublicatedSchedule=true&departmentId=", dept_id);
 	nob_temp_reset();
 	mg_send(lsmgr.conn, msg, strlen(msg));
 }

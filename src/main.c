@@ -170,6 +170,10 @@ void HandleHTTPMessage(struct mg_connection* c, void* ev_data) {
 	}
 
 	if (!mg_strcmp(hm->method, mg_str("GET"))) {
+		if (!mg_strcmp(hm->uri, mg_str("/letisch/depts"))) {
+			LSFetchDepts(c);
+			return;
+		}
 		if (!mg_strcmp(hm->uri, mg_str("/letisch/teacher"))) {
 			char id[32];
 			if (mg_http_get_var(&hm->query, "id", id, 32) > 0) {
@@ -178,7 +182,10 @@ void HandleHTTPMessage(struct mg_connection* c, void* ev_data) {
 			return;
 		}
 		if (!mg_strcmp(hm->uri, mg_str("/letisch/teacher_list"))) {
-			LSFetchTeacherList(c);
+			char dept_id[32];
+			if (mg_http_get_var(&hm->query, "dept_id", dept_id, 32) > 0) {
+				LSFetchTeacherList(c, dept_id);
+			}
 			return;
 		}
 		struct mg_http_serve_opts opts = { .root_dir = aconf.web_dir };
