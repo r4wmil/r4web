@@ -77,19 +77,19 @@ void LSFetchTeacherList(struct mg_connection* c, char* dept_id) {
 void LSHandler(struct mg_connection* c, int ev, void* ev_data) {
 	switch (ev) {
 		case MG_EV_CONNECT:
-			MG_INFO(("CONNECTION\n"));
+			MG_INFO(("CONNECTION"));
 			struct mg_str ca = mg_file_read(&mg_fs_posix, "/etc/ssl/certs/ca-certificates.pem");
 			struct mg_tls_opts opts = { .ca=ca, .name=mg_str("digital.etu.ru") };
 			mg_tls_init(c, &opts);
 			break;
 		case MG_EV_TLS_HS:
-			MG_INFO(("HANDSHAKE\n"));
+			MG_INFO(("HANDSHAKE"));
 			break;
 		case MG_EV_HTTP_MSG:
 			// TODO: safe proxy (connection closes case)
-			MG_INFO(("MSG\n"));
+			MG_INFO(("MSG"));
 			struct mg_http_message* hm = (struct mg_http_message*)ev_data;
-			MG_INFO(("'%.*s'", (int)hm->message.len, hm->message.buf));
+			//MG_INFO(("'%.*s'", (int)hm->message.len, hm->message.buf));
 			mg_http_reply(lsmgr.queue.buf[lsmgr.queue.head], 200, "", "%.*s", (int)hm->body.len, hm->body.buf);
 			lsmgr.queue.head = (lsmgr.queue.head + 1) % LS_QUEUE_MAX;
 			break;
@@ -97,6 +97,7 @@ void LSHandler(struct mg_connection* c, int ev, void* ev_data) {
 			MG_INFO(("ERROR '%s'\n", ev_data));
 			break;
 		case MG_EV_CLOSE:
+			MG_INFO(("CLOSE"));
 			if (lsmgr.is_closing) { break; }
 			LSConnect(c->mgr);
 			break;
