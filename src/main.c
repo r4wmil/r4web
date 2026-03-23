@@ -247,7 +247,6 @@ int main(int argc, char* argv[]) {
 	mg_mgr_init(&mgr);
 	char addrstr[32];
 	snprintf(addrstr, sizeof(addrstr), "http://0.0.0.0:%d", aconf.port);
-	LSConnect(&mgr);
 	mg_http_listen(&mgr, addrstr, EventHandler, NULL);
 
 	signal(SIGINT, app_terminate);

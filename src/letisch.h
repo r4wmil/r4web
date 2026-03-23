@@ -11,13 +11,12 @@ typedef struct LSQueue {
 
 typedef struct LSMgr {
 	struct mg_connection* conn;
-	LSQueue queue;
 	bool is_closing;
 } LSMgr;
 
 extern LSMgr lsmgr;
 
-void LSConnect(struct mg_mgr* mgr);
+struct mg_connection* LSConnect(struct mg_mgr* mgr);
 void LSFetchDepts(struct mg_connection* c);
 void LSFetchTeacherList(struct mg_connection* c, char* dept_id);
 void LSFetchTeacherSchedule(struct mg_connection* c, char* id);
@@ -29,49 +28,52 @@ void LSHandler(struct mg_connection* c, int ev, void* ev_data);
 
 LSMgr lsmgr;
 
-void LSConnect(struct mg_mgr* mgr) {
-	lsmgr.conn = mg_http_connect(mgr, "https://digital.etu.ru", LSHandler, NULL);
+struct mg_connection* LSConnect(struct mg_mgr* mgr) {
+	return mg_http_connect(mgr, "https://digital.etu.ru", LSHandler, NULL);
 }
 
 void LSDisconnect() { lsmgr.is_closing = true; }
 
 void LSFetchDepts(struct mg_connection* c) {
-	lsmgr.queue.buf[lsmgr.queue.tail] = c;
-	lsmgr.queue.tail = (lsmgr.queue.tail + 1) % LS_QUEUE_MAX;
+	struct mg_connection* sc = LSConnect(c->mgr);
+	sc->fn_data = c;
 	char* msg = nob_temp_sprintf(
 			"GET %s HTTP/1.1\r\n"
 			"Host: digital.etu.ru\r\n"
+			"Connection: close\r\n"
 			"User-Agent: curl/8.19.0\r\n"
 			"Accept: */*\r\n\r\n",
 			"/api/general/dicts/departments");
 	nob_temp_reset();
-	mg_send(lsmgr.conn, msg, strlen(msg));
+	mg_send(sc, msg, strlen(msg));
 }
 
 void LSFetchTeacherSchedule(struct mg_connection* c, char* id) {
-	lsmgr.queue.buf[lsmgr.queue.tail] = c;
-	lsmgr.queue.tail = (lsmgr.queue.tail + 1) % LS_QUEUE_MAX;
+	struct mg_connection* sc = LSConnect(c->mgr);
+	sc->fn_data = c;
 	char* msg = nob_temp_sprintf(
 			"GET %s%s HTTP/1.1\r\n"
 			"Host: digital.etu.ru\r\n"
+			"Connection: close\r\n"
 			"User-Agent: curl/8.19.0\r\n"
 			"Accept: */*\r\n\r\n",
 			"/api/schedule/objects/publicated?subjectType=%D0%9B%D0%B5%D0%BA&subjectType=%D0%9F%D1%80&subjectType=%D0%9B%D0%B0%D0%B1&subjectType=%D0%9A%D0%9F&subjectType=%D0%9A%D0%A0&subjectType=%D0%94%D0%BE%D0%B1&subjectType=%D0%9C%D0%AD%D0%BA&subjectType=%D0%9F%D1%80%D0%B0%D0%BA&subjectType=%D0%A2%D0%B5%D1%81%D1%82&withSubjectCode=true&withURL=true&noEmptyGroups=true&teacherRequired=true&withFaculty=true&anyTeacherId=", id);
 	nob_temp_reset();
-	mg_send(lsmgr.conn, msg, strlen(msg));
+	mg_send(sc, msg, strlen(msg));
 }
 
 void LSFetchTeacherList(struct mg_connection* c, char* dept_id) {
-	lsmgr.queue.buf[lsmgr.queue.tail] = c;
-	lsmgr.queue.tail = (lsmgr.queue.tail + 1) % LS_QUEUE_MAX;
+	struct mg_connection* sc = LSConnect(c->mgr);
+	sc->fn_data = c;
 	char* msg = nob_temp_sprintf(
 			"GET %s%s HTTP/1.1\r\n"
 			"Host: digital.etu.ru\r\n"
+			"Connection: close\r\n"
 			"User-Agent: curl/8.19.0\r\n"
 			"Accept: */*\r\n\r\n",
 			"/api/general/dicts/teachers?forLastPublicatedSchedule=true&departmentId=", dept_id);
 	nob_temp_reset();
-	mg_send(lsmgr.conn, msg, strlen(msg));
+	mg_send(sc, msg, strlen(msg));
 }
 
 void LSHandler(struct mg_connection* c, int ev, void* ev_data) {
@@ -89,23 +91,15 @@ void LSHandler(struct mg_connection* c, int ev, void* ev_data) {
 			MG_INFO(("MSG"));
 			struct mg_http_message* hm = (struct mg_http_message*)ev_data;
 			//MG_INFO(("'%.*s'", (int)hm->message.len, hm->message.buf));
-			struct mg_connection* cc = lsmgr.queue.buf[lsmgr.queue.head];
-			bool is_alive = false;
-			for (struct mg_connection* p = c->mgr->conns; p; p = p->next) {
-				if (p == cc) { is_alive = true; break; }
-			}
-			if (is_alive) {
-				mg_http_reply(cc, 200, "Connection: close\r\n", "%.*s", (int)hm->body.len, hm->body.buf);
-			}
-			lsmgr.queue.head = (lsmgr.queue.head + 1) % LS_QUEUE_MAX;
+			struct mg_connection* cc = (struct mg_connection*)c->fn_data;
+			if (!cc) { MG_INFO(("cc=null")); }
+			mg_http_reply(cc, 200, "Connection: close\r\n", "%.*s", (int)hm->body.len, hm->body.buf);
 			break;
 		case MG_EV_ERROR:
 			MG_INFO(("ERROR '%s'\n", ev_data));
 			break;
 		case MG_EV_CLOSE:
 			MG_INFO(("CLOSE"));
-			if (lsmgr.is_closing) { break; }
-			LSConnect(c->mgr);
 			break;
 	}
 }
