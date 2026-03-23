@@ -86,11 +86,18 @@ void LSHandler(struct mg_connection* c, int ev, void* ev_data) {
 			MG_INFO(("HANDSHAKE"));
 			break;
 		case MG_EV_HTTP_MSG:
-			// TODO: safe proxy (connection closes case)
 			MG_INFO(("MSG"));
 			struct mg_http_message* hm = (struct mg_http_message*)ev_data;
 			//MG_INFO(("'%.*s'", (int)hm->message.len, hm->message.buf));
-			mg_http_reply(lsmgr.queue.buf[lsmgr.queue.head], 200, "", "%.*s", (int)hm->body.len, hm->body.buf);
+			struct mg_connection* cc = lsmgr.queue.buf[lsmgr.queue.head];
+			bool is_alive = false;
+			for (struct mg_connection* p = c->mgr->conns; !p; p = p->next) {
+				if (p == cc) { is_alive = true; break; }
+			}
+			is_alive = true;
+			if (is_alive) {
+				mg_http_reply(cc, 200, "Connection: close\r\n", "%.*s", (int)hm->body.len, hm->body.buf);
+			}
 			lsmgr.queue.head = (lsmgr.queue.head + 1) % LS_QUEUE_MAX;
 			break;
 		case MG_EV_ERROR:
