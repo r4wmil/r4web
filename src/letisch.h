@@ -12,11 +12,13 @@ typedef struct LSQueue {
 typedef struct LSMgr {
 	struct mg_connection* conn;
 	LSQueue queue;
+	bool is_closing;
 } LSMgr;
 
 extern LSMgr lsmgr;
 
 void LSConnect(struct mg_mgr* mgr);
+void LSDisconnect();
 void LSFetchTeacherSchedule(struct mg_connection* c, char* id);
 void LSHandler(struct mg_connection* c, int ev, void* ev_data);
 
@@ -29,6 +31,8 @@ LSMgr lsmgr;
 void LSConnect(struct mg_mgr* mgr) {
 	lsmgr.conn = mg_http_connect(mgr, "https://digital.etu.ru", LSHandler, NULL);
 }
+
+void LSDisconnect() { lsmgr.is_closing = true; }
 
 void LSFetchTeacherSchedule(struct mg_connection* c, char* id) {
 	lsmgr.queue.buf[lsmgr.queue.tail] = c;
@@ -66,6 +70,7 @@ void LSHandler(struct mg_connection* c, int ev, void* ev_data) {
 			MG_INFO(("ERROR '%s'\n", ev_data));
 			break;
 		case MG_EV_CLOSE:
+			if (lsmgr.is_closing) { break; }
 			LSConnect(c->mgr);
 			break;
 	}

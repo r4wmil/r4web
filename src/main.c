@@ -250,9 +250,9 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Closing
+	LSDisconnect();
 	mg_mgr_free(&mgr);
 	printf("Server closed.\n");
-
 	nob_sb_free(http_page_string);
 	nob_sb_free(http_headers_string);
 
