@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ENTR_CMD="./build && ./out/r4web $@"
+ENTR_CMD="./build s && ./out/r4web $@"
 
 find . -type f \
 	-name "*.c" -o \
