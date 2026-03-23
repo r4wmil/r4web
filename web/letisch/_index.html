@@ -1,19 +1,18 @@
 <div class="r_content">
 	<div class="r_box">
-		<select id="depts_dropdown">
-		</select>
-		<select id="teachers_dropdown">
-		</select>
 		<h2>
 			<span class="lang_en">Schedule ETU "LETI"</span>
 			<span class="lang_ru">Расписание ЛЭТИ</span>
 		</h2>
+		<p>
+			<span>
+				<select id="depts_dropdown"></select>,
+				<select id="teachers_dropdown"></select>
+			</span>
+		</p>
 		<p>Преподаватель: <span id="sch_teacher"></span></p>
 		<p>
-			<br>
-			<span id="sch_dump">
-
-			</span>
+			<span id="sch_dump"></span>
 		</p>
 	</div>
 </div>
@@ -86,6 +85,7 @@
 		fetch(`/letisch/teacher_list?dept_id=${dept_id}`)
 			.then(resp => resp.json())
 			.then(buf => {
+				buf.sort((a, b) => a.initials.localeCompare(b.initials));
 				teachers_dropdown.innerHTML = "";
 				teachers_dropdown.innerHTML += `<option value="-1">(не выбран)</option>`;
 				for (let i = 0; i < buf.length; i++) {
@@ -118,8 +118,14 @@
 						lesson_arr[weekDay].push(lesson);
 					}
 				}
+				var flag = 0;
+				for (let key in lesson_arr) {
+					if (lesson_arr[key].length != 0) { flag = 1; }
+				}
+				if (!flag) { sch_dump.innerHTML = "У препода нет пар походу, бро"; return; }
 				for (let key in lesson_arr) {
 					if (lesson_arr[key].length == 0) { continue; }
+					lesson_arr[key].sort((a, b) => a.auditoriumReservation.reservationTime.startTime - b.auditoriumReservation.reservationTime.startTime);
 					s += `<h3>${WeekDayToRu(key)}: </h3>`;
 					for (let j = 0; j < lesson_arr[key].length; j++) {
 						var lesson = lesson_arr[key][j];
