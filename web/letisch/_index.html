@@ -1,5 +1,5 @@
 <div class="r_content">
-	<div class="r_box">
+	<div class="r_box" style="word-wrap: break-word;">
 		<h2>
 			<span class="lang_en">Schedule ETU "LETI"</span>
 			<span class="lang_ru">Расписание ЛЭТИ</span>
@@ -163,6 +163,7 @@
 	});
 	teachers_dropdown.addEventListener('change', function () {
 		if (this.value == -1) { return; }
+		sch_dump.innerHTML = "";
 		SendRequest(this.value);
 		sch_teacher.textContent = teacher_names[this.selectedIndex - 1];
 	});
