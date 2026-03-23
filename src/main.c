@@ -41,9 +41,9 @@ size_t active_conns = 0;
 
 // --- SSR ---
 
-#define VISITORS_IMPLEMENTATION
-#include "visitors.h"
-#undef VISITORS_IMPLEMENTATION
+//#define VISITORS_IMPLEMENTATION
+//#include "visitors.h"
+//#undef VISITORS_IMPLEMENTATION
 
 // --- APP ---
 
@@ -146,11 +146,11 @@ void HandleHTTPMessage(struct mg_connection* c, void* ev_data) {
 		return;
 	}
 
-	Visitor* visitor = HTTPProcessVisitor(hm);
-	if (visitor == NULL) {
-		visitor = HTTPAddPendingVisitor(&http_headers_string);
-		if (visitor == NULL) { return; }
-	}
+	//Visitor* visitor = HTTPProcessVisitor(hm);
+	//if (visitor == NULL) {
+	//	visitor = HTTPAddPendingVisitor(&http_headers_string);
+	//	if (visitor == NULL) { return; }
+	//}
 
 	if (!mg_strcmp(hm->method, mg_str("POST"))) {
 		if (!mg_strcmp(hm->uri, mg_str("/binary"))) {
@@ -219,7 +219,7 @@ void EventHandler(struct mg_connection* c, int ev, void* ev_data) {
 			HandleHTTPMessage(c, ev_data);
 			break;
 		case MG_EV_POLL:
-			VisitorsManageUnactive();
+			//VisitorsManageUnactive();
 			break;
 		case MG_EV_CLOSE:
 			break;
