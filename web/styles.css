@@ -161,7 +161,7 @@ footer {
 	flex-flow: row;
 	justify-content: center;
 	align-items: center;
-	width: 100vw;
+	width: 100%;
 	min-height: 100vh;
 	background-color: var(--bg-dark);
 	box-sizing: border-box; /* No shrinking */
