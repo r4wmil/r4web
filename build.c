@@ -11,6 +11,13 @@
 String_Builder page_begin = {0};
 String_Builder page_end = {0};
 
+#define PAGE_CONVERT_SIMPLE(dir_) \
+	do { \
+		String_Builder sb = {0}; \
+		NOB_ASSERT(nob_read_entire_file(dir_"/_index.html", &sb)); \
+		NOB_ASSERT(nob_write_entire_file(dir_"/index.html", sb.items, sb.count)); \
+	} while(0)
+
 #define PAGE_CONVERT(dir_) \
 	do { \
 		String_Builder sb = {0}; \
@@ -48,6 +55,7 @@ int main(int argc, char** argv) {
 	PAGE_CONVERT("web/mna");
 	PAGE_CONVERT("web/askme");
 	PAGE_CONVERT("web/letisch");
+	PAGE_CONVERT_SIMPLE("web/cells");
 	Nob_String_Builder enums_js = enums_generate_js();
 	NOB_ASSERT(nob_write_entire_file("web/enums.js", enums_js.items, enums_js.count)); \
 	

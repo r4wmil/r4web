@@ -1,0 +1,22 @@
+<canvas width="500" height="500" id="canvas"></canvas>
+<script>
+	const ctx = canvas.getContext('2d');
+	function draw_field(px, py, size, cells) {
+		ctx.styleStyle = '#000';
+		ctx.lineWidth = 2;
+		ctx.beginPath();
+		cell_size = size / cells;
+		for (var x = 0; x < cells + 1; x++) {
+			var _x = px + x * cell_size;
+			ctx.moveTo(_x, py);
+			ctx.lineTo(_x, py + size);
+		}
+		for (var y = 0; y < cells + 1; y++) {
+			var _y = py + y * cell_size;
+			ctx.moveTo(px, _y);
+			ctx.lineTo(px + size, _y);
+		}
+		ctx.stroke();
+	}
+	draw_field(10, 10, 300, 7);
+</script>
