@@ -212,7 +212,7 @@ void HandleWSMessage(struct mg_connection* c, void* ev_data) {
 void EventHandler(struct mg_connection* c, int ev, void* ev_data) {
 	switch (ev) {
 		case MG_EV_WS_MSG:
-			NOB_ASSERT(c->fn_data);
+			if (!c->fn_data) { return; }
 			HandleWSMessage(c, ev_data);
 			break;
 		case MG_EV_HTTP_MSG:
