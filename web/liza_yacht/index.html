@@ -25,7 +25,6 @@
 			/*padding: 64px 24px 48px 24px;*/
 			padding: 0px;
 			box-sizing: border-box; /* No shrinking */
-			overflow: hidden;
 			object-fit: contain;
 			position: relative;
 		}
@@ -119,10 +118,23 @@
 				</div>
 			</div>
 		</div>
-		<div id="r_pane1" class="r_pane">
-			<div class="r_centering">
-				<div style="position: relative; width: 100%;">
-					<img id="obj_big_yacht" src="https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/yacht.png" style="max-height: 90%; max-width: 90%;"></img>
+		<div id="r_pane1" class="r_pane" style="height: 200vh;">
+			<div style="position: sticky; top: 0; height: 100vh;">
+				<div class="r_centering">
+					<div style="display: flex; align-items: center; justify-content: center; gap: 5vw; width: 90%;">
+
+						<div style="width: 40%; text-align: right;">
+							<h1>Big yacht</h1>
+							<p>Your text goes here.</p>
+						</div>
+
+						<div style="position: relative; width: 50%;">
+							<img id="obj_big_yacht"
+									 src="https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/yacht.png"
+									 style="display: block; width: 100%; height: auto;">
+						</div>
+
+					</div>
 				</div>
 			</div>
 		</div>
@@ -156,8 +168,8 @@
 		let big_targ = -100;
 		let big_curr = -100;
 		function big_set() {
-			const passed = scrollY > r_pane0.offsetTop + r_pane0.offsetHeight - 10;
-			big_targ = passed ? 50 : -100;
+			const passed = scrollY > r_pane1.offsetTop + r_pane1.firstElementChild.offsetHeight - 10;
+			big_targ = passed ? 25 : -100;
 		}
 
 		window.addEventListener("scroll", big_set);
