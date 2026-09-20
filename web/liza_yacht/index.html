@@ -7,6 +7,9 @@
 		<link rel="stylesheet" href="https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/styles.css">
 	</head>
 	<style>
+		:root {
+			--bg: #d9d9d9;
+		}
 		html {
 			scroll-behaviour: smooth;
 		}
@@ -23,8 +26,8 @@
 			width: 100%;
 			height: 100vh;
 			min-height: 0;
-			background: no-repeat center/cover white;
-			box-shadow: inset 0 0 0 100vmax rgba(255,255,255,0.45);
+			background: no-repeat center/cover var(--bg);
+			/*box-shadow: inset 0 0 0 100vmax rgba(255,255,255,0.45);*/
 			/*padding: 64px 24px 48px 24px;*/
 			padding: 0px;
 			box-sizing: border-box; /* No shrinking */
@@ -47,6 +50,16 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+		}
+		@media (max-width: 600px) {
+			#r_pane1 .r_centering > div {
+				flex-direction: column;
+			}
+
+			#r_pane1 .r_centering > div > div {
+				width: 90% !important;
+				text-align: center !important;
+			}
 		}
 		.r_welcome {
 			display: block;
@@ -131,12 +144,20 @@
 							<p>Your text goes here.</p>
 						</div>
 
-						<div style="position: relative; width: 50%;">
-							<img id="obj_big_yacht"
-									 src="https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/yacht.png"
-									 style="display: block; width: 100%; height: auto;">
-						</div>
+						<div id="obj_big_yacht" style="position: relative; width: 50%;">
+							<div style="
+													position: absolute;
+													right: 50%;
+													top: 0;
+													width: 50vw;
+													height: 100%;
+													background: var(--bg);
+													z-index: 0;
+													"></div>
 
+							<img src="https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/big_yacht.svg"
+									 style="display: block; width: 100%; height: auto; position: relative; z-index: 1;">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -172,7 +193,7 @@
 		let big_curr = -100;
 		function big_set() {
 			const passed = scrollY > r_pane1.offsetTop + r_pane1.firstElementChild.offsetHeight - 10;
-			big_targ = passed ? 25 : -100;
+			big_targ = passed ? 0 : -250;
 		}
 
 		window.addEventListener("scroll", big_set);
@@ -185,7 +206,7 @@
 
 			var x = big_curr;
 			var y = Math.sin(big_curr / 8.0);
-			obj_big_yacht.style.transform = `translate(calc(-50% + ${x}vw), ${y}%)`;
+			obj_big_yacht.style.transform = `translate(${x}%, ${y}%)`;
 
 			requestAnimationFrame(big_animate);
 		}
