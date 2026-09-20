@@ -5,6 +5,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/styles.css">
+		<link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;500;600;700&display=swap" rel="stylesheet">
 	</head>
 	<style>
 		:root {
@@ -51,14 +52,27 @@
 			align-items: center;
 			justify-content: center;
 		}
+		#r_p1_rect {
+			position: absolute;
+			right: 67%;
+			bottom: 0;
+			width: 200vw;
+			height: 100vh;
+			filter: blur(0px);
+			background: var(--bg);
+			z-index: 0;
+		}
 		@media (max-width: 600px) {
-			#r_pane1 .r_centering > div {
+			#obj_big_yacht > div {
 				flex-direction: column;
 			}
-
-			#r_pane1 .r_centering > div > div {
+			#obj_big_yacht > div > div {
 				width: 90% !important;
 				text-align: center !important;
+			}
+			#r_p1_rect {
+				filter: blur(20px);
+				right: 0;
 			}
 		}
 		.r_blur_anim {
@@ -71,6 +85,19 @@
 			opacity: 0;
 			filter: blur(10px);
 			transition-delay: 1s;
+		}
+		/* --- Text --- */
+		.r_maintext * {
+			font-family: 'Alegreya', serif;
+			font-style: normal;
+			font-weight: 400;
+			font-size: clamp(18px, 2vw, 30px);
+			line-height: clamp(18px, 2.2vw, 32px);;
+			color: #000000;
+		}
+		.r_maintext b,
+		.r_maintext strong {
+			font-weight: 700;
 		}
 		/* --- Old --- */
 		.r_welcome {
@@ -146,32 +173,57 @@
 				</div>
 			</div>
 		</div>
-		<div id="r_pane1" class="r_pane" style="height: 200vh;">
+		<div id="r_pane1" class="r_pane" style="height: 300vh;">
 			<div style="position: sticky; top: 0; height: 100vh;">
 				<div style="position: absolute; width: 100%; height: 100%; z-index: 0;">
 					<div class="r_centering">
-						<div id="r_p0_text1" class="r_blur_anim" style="width: 20%; text-align: left;">
-							<h1>lfadlgd</h1>
-							<p>sdfsdff</p>
-						</div>
-					</div>
-				</div>
-				<div class="r_centering">
-					<div id="obj_big_yacht">
-						<div style="display: flex; align-items: center; justify-content: center; gap: 5vw; width: 90%;">
-							<div id="r_p0_text2" style="width: 40%; text-align: right; z-index: 1;">
-								<h1>Big yacht</h1>
-								<p>Your text goes here.</p>
+						<div id="r_p0_text1" class="r_blur_anim" style="position: absolute; left: 10%;">
+							<div id="r_p0_text1_1" class="r_maintext" style="left: 10px; width: 50%; text-align: left;">
+								<p>
+								С берега парусная лодка выглядит почти очевидно: корпус, мачта и парус. Кажется,
+								что главное — поймать ветер и направить
+								лодку вперёду, но уже первые минуты на воде показывают, что всё устроено сложнее.
+								</p>
 							</div>
-							<div style="position: relative; width: 50%;">
-								<div style="position: absolute; right: 60%; top: 0; width: 50vw; height: 100%; background: var(--bg); z-index: 0;"></div>
-								<img src="https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/big_yacht.svg"
-										 style="display: block; width: 100%; height: auto; position: relative; z-index: 1;">
+							<div id="r_p0_text1_2" class="r_maintext" style="left: 10px; width: 50%; text-align: left;">
+								<p style="position: relative; left: 20px;">
+								За поворотом руля следует изменение курса,
+								а там уже ветер встречает лодку под новым углом. Тогда приходится снова смотреть
+								на парус, гик и положение корпуса.
+								</p>
+							</div>
+							<div>
+							</div>
+						</div>
+						<div class="r_centering">
+							<div id="obj_big_yacht">
+								<div style="display: flex; align-items: center; justify-content: center; gap: 5vw; width: 95%; padding: 20px;">
+									<div id="r_p0_text2" class="r_maintext" style="width: 40%; text-align: left; z-index: 1;">
+										<p><strong>Парус</strong><br>
+										использует энергию ветра и создаёт силу, которая помогает лодке двигаться.</p>
+										<p><strong>Мачта</strong><br>
+										держит паруса.</p>
+										<p><strong>Гик</strong><br>
+										помогает управлять положением и формой основного паруса.</p>
+										<p><strong>Руль</strong><br>
+										меняет направление движения,<br>
+										а корпус соединяет всё это в одну систему.</p>
+										<p><strong>Киль</strong><br>
+										уменьшает боковой снос и помогает лодке сохранять устойчивость.</p>
+									</div>
+									<div style="position: relative; width: 50%;">
+										<div id="r_p1_rect"></div>
+										<img src="https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/big_yacht.svg"
+												 style="display: block; width: 100%; height: auto; position: relative; z-index: 1;">
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
+		<div id="r_pane2" class="r_pane">
 		</div>
 		<!--<footer>
 			<span class="r_footer_copyright">
@@ -180,7 +232,7 @@
 		</footer>-->
 	</body>
 	<script>
-		// --- YACHT SMALL ---
+		// --- PANE0 ---
 		var yacht_targ = -7;
 		var yacht_curr = -7;
 		function yacht_set(v) {
@@ -199,37 +251,25 @@
 			requestAnimationFrame(yacht_animate);
 		}
 		yacht_animate();
-		// --- YACHT BIG ---
-		let big_targ = -100;
-		let big_curr = -100;
+		// --- PANE1 ---
 		function big_set() {
-			const passed = scrollY > r_pane1.offsetTop + r_pane1.firstElementChild.offsetHeight - 10;
-			if (passed) {
-				big_targ = 0;
-				if (!r_p0_text1.classList.contains("hidden")) {
-					r_p0_text1.classList.add("hidden");
-				}
+			const start = r_pane1.offsetTop;
+			const h = r_pane1.firstElementChild.offsetHeight;
+			const p = (scrollY - start) / h;
+			if (p < 1) {
+				big_curr = -100 + p * 100;
+			} else if (p < 2) {
+				big_curr = 0;
 			} else {
-				big_targ = -250;
-				r_p0_text1.classList.remove("hidden");
+				big_curr = Math.min(100, (p - 2) * 100);
 			}
+			obj_big_yacht.style.transform = `translate(${big_curr}%, ${Math.sin(big_curr / 8)}%)`;
 		}
 
 		window.addEventListener("scroll", big_set);
 		window.addEventListener("resize", big_set);
 		big_set();
-
-		function big_animate() {
-			const diff = big_targ - big_curr;
-			big_curr += diff * 0.04;
-
-			var x = big_curr;
-			var y = Math.sin(big_curr / 8.0);
-			obj_big_yacht.style.transform = `translate(${x}%, ${y}%)`;
-
-			requestAnimationFrame(big_animate);
-		}
-
-		big_animate();
+		// --- PANE2 ---
+		// ...
 	</script>
 </html>
