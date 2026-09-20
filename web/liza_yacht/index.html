@@ -8,6 +8,12 @@
 		<link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;500;600;700&display=swap" rel="stylesheet">
 	</head>
 	<style>
+		@font-face {
+			font-family: 'Trattatello';
+			src: url('https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/t.ttf') format('truetype');
+			font-weight: 400;
+			font-style: normal;
+		}
 		:root {
 			--bg: #d9d9d9;
 		}
@@ -42,6 +48,23 @@
 			width: 100%;
 			height: 100%;
 		}
+		.r_pane_title {
+			position: absolute;
+			top: 3%;
+			left: 2%;
+			font-family: 'Trattatello', serif;
+			font-size: clamp(18px, 4vw, 60px);
+			color: #000;
+			z-index: 10;
+
+			opacity: 0;
+			filter: blur(10px);
+			transition: opacity 0.5s, filter 0.5s;
+		}
+		.r_pane_title.visible {
+			opacity: 1;
+			filter: blur(0);
+		}
 		.r_centering {
 			position: absolute;
 			width: 100%;
@@ -58,7 +81,7 @@
 			bottom: 0;
 			width: 200vw;
 			height: 100vh;
-			filter: blur(0px);
+			filter: blur(20px);
 			background: var(--bg);
 			z-index: 0;
 		}
@@ -175,6 +198,7 @@
 		<div id="r_pane1" class="r_pane" style="height: 300vh;">
 			<div style="position: sticky; top: 0; height: 100vh;">
 				<div style="position: absolute; width: 100%; height: 100%; z-index: 0;">
+					<div class="r_pane_title">Лодка</div>
 					<div class="r_centering">
 						<div id="r_p0_text1" class="r_blur_anim" style="position: absolute; left: 10%;">
 							<div id="r_p0_text1_1" class="r_maintext" style="left: 10px; width: 50%; text-align: left;">
@@ -222,31 +246,71 @@
 				</div>
 			</div>
 		</div>
-		<div id="r_pane2" class="r_pane">
+		<div id="r_pane2_1" class="r_pane" style="height: 200vh;">
+			<div class="r_pane_title">Ветер</div>
 		</div>
-		<!--<footer>
-			<span class="r_footer_copyright">
-				тут чёта © 2026
-			</span>
-		</footer>-->
+		<div id="r_pane2_2" class="r_pane" style="height: 200vh;">
+		</div>
+		<div id="r_pane3" class="r_pane" style="height: 100vh;">
+			<div class="r_pane_title">Курс</div>
+		</div>
+		<div id="r_pane4" class="r_pane" style="height: 100vh;">
+			<div class="r_pane_title">Парус</div>
+		</div>
+		<div id="r_pane5" class="r_pane" style="height: 100vh;">
+			<div class="r_pane_title">Узлы</div>
+		</div>
+		<div id="r_pane6" class="r_pane">
+			<div class="r_pane_title">Навигация</div>
+		</div>
+		<div id="r_pane7" class="r_pane" style="height: 100vh;">
+			<div class="r_pane_title">Подготовка</div>
+		</div>
+		<div id="r_pane8" class="r_pane" style="height: 100vh;">
+			<div class="r_pane_title">Погода</div>
+		</div>
+		<div id="r_pane9" class="r_pane" style="height: 100vh;">
+			<div class="r_pane_title">Безопасность</div>
+		</div>
+		<div id="r_pane10" class="r_pane" style="height: 100vh;">
+			<div class="r_pane_title">Камбуз</div>
+		</div>
+		<div id="r_pane11" class="r_pane" style="height: 100vh;">
+			<div class="r_pane_title">Концовка</div>
+		</div>
 	</body>
 	<script>
+		// --- Pane names ---
+		const panes = document.querySelectorAll(".r_pane");
+		function UpdatePaneTitles() {
+			panes.forEach(pane => {
+				const name = pane.querySelector(".r_pane_title");
+				if (!name) return;
+				const rect = pane.getBoundingClientRect();
+
+				name.classList.toggle(
+					"visible",
+					rect.top < innerHeight && rect.bottom > 0
+				);
+			});
+		}
+		window.addEventListener("scroll", scrollUpdate);
+		window.addEventListener("resize", scrollUpdate);
 		// --- PANE0 ---
 		var yacht_targ = -7;
 		var yacht_curr = -7;
 		function yacht_set(v) {
 			yacht_targ = Math.min(420 + v * 0.95, 700);
 		}
-		yacht_set(scrollY);
-		window.addEventListener("scroll", () => { yacht_set(scrollY); });
 		function yacht_animate() {
 			const maxStep = 2.5;
 			const diff = yacht_targ - yacht_curr;
 			var diff_delay_fact = Math.min(Math.abs(diff), 100.0) / 100.0;
-			yacht_curr += Math.sign(diff) * Math.min(Math.abs(diff), maxStep) * diff_delay_fact;
+			var d = Math.sign(diff) * Math.min(Math.abs(diff), maxStep) * diff_delay_fact;
+			yacht_curr += d;
 			var x = yacht_curr;
 			var y = Math.sin(yacht_curr / 20.0);
-			obj_yacht.style.transform = `translate(${x}%, ${y}%)`;
+			obj_yacht.style.transform = `translate(${x}%, ${y}%) scaleX(${d < 0 ? -1 : 1})`;
 			requestAnimationFrame(yacht_animate);
 		}
 		yacht_animate();
@@ -264,11 +328,14 @@
 			}
 			obj_big_yacht.style.transform = `translate(${big_curr}%, ${Math.sin(big_curr / 8)}%)`;
 		}
-
-		window.addEventListener("scroll", big_set);
-		window.addEventListener("resize", big_set);
-		big_set();
 		// --- PANE2 ---
 		// ...
+		// ---
+		function scrollUpdate() {
+			UpdatePaneTitles();
+			yacht_set(scrollY);
+			big_set();
+		}
+		scrollUpdate();
 	</script>
 </html>
