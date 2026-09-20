@@ -109,18 +109,47 @@
 			filter: blur(10px);
 			transition-delay: 1s;
 		}
+		/* --- PANE3 --- */
+		#course_svg g:not(#tr) {
+			opacity: 0;
+			transition: opacity 0.3s;
+		}
+		#course_svg g.course_visible {
+			opacity: 1;
+		}
+		#course_svg #tr {
+			opacity: 1;
+		}
+		#course_text {
+			position: absolute;
+			left: 50%;
+			top: 5%;
+			width: 45%;
+		}
+		#course_text > div {
+			display: none;
+			font-family: 'Alegreya', serif;
+			font-size: clamp(18px, 2vw, 30px);
+		}
+		#course_text > div.course_visible {
+			display: block;
+		}
 		/* --- Text --- */
 		.r_maintext * {
 			font-family: 'Alegreya', serif;
 			font-style: normal;
 			font-weight: 400;
-			font-size: clamp(18px, 2vw, 30px);
-			line-height: clamp(18px, 2.2vw, 32px);;
+			font-size: clamp(18px, 1.9vw, 30px);
+			line-height: clamp(16px, 1.6vw, 48px);
 			color: #000000;
 		}
 		.r_maintext b,
 		.r_maintext strong {
 			font-weight: 700;
+		}
+		.r_maintext h1 {
+			font-size: clamp(18px, 2.5vw, 48px);
+			font-weight: 600;
 		}
 		/* --- Old --- */
 		.r_welcome {
@@ -251,8 +280,66 @@
 		</div>
 		<div id="r_pane2_2" class="r_pane" style="height: 200vh;">
 		</div>
-		<div id="r_pane3" class="r_pane" style="height: 100vh;">
-			<div class="r_pane_title">Курс</div>
+		<div id="r_pane3" class="r_pane" style="height: 800vh;">
+			<div style="position: sticky; top: 0; height: 100vh;">
+				<div class="r_pane_title">Курс</div>
+				<div class="r_centering">
+					<div style="position: relative; width: 80%; max-width: 1000px;">
+						<div id="course_svg"
+								 data-svg="https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/course.svg"
+								 style="display:block; width:100%; height:auto;">
+						</div>
+
+						<div id="course_text">
+							<div class="r_maintext">
+								<p>
+									Направление движения парусной лодки зависит от того, под каким углом к ней приходит ветер. Это положение называют <span style="font-family: 'Trattatello', serif">курсом относительно ветра</span>. Чем сильнее лодка поворачивается относительно направления ветра, тем по-разному работают её паруса. Поэтому путь можно представить как последовательность нескольких курсов.
+								</p>
+							</div>
+							<div class="r_maintext">
+								<h1>Фордевинд</h1>
+								<p>
+									<span style="font-family: 'Trattatello', serif">Ветер приходит сзади</span>. Теперь лодка движется примерно в ту же сторону, куда дует ветер. Парус максимально раскрывается в сторону, чтобы использовать попутный поток. Кажется, что именно так парусник
+									и должен двигаться всегда, но фордевинд — лишь один из возможных курсов.
+								</p>
+							</div>
+							<div class="r_maintext">
+								<h1>Галфинд</h1>
+								<p>
+									<span style="font-family: 'Trattatello', serif">Ветер приходит сзади</span>. Когда ветер приходит примерно перпендикулярно борту, лодка идёт курсом галфвинд. Паруса уже можно отпустить дальше от центра. Это один
+									из наиболее понятных визуально курсов: ветер идёт поперёк, а лодка движется вперёд.
+								</p>
+							</div>
+							<div class="r_maintext">
+								<h1>Крутой бейдевинд</h1>
+								<p>
+									<span style="font-family: 'Trattatello', serif">Максимально близко к ветру</span>Лодка идёт навстречу ветру под острым углом. Паруса сильно подтянуты к центру лодки. Прямо против ветра двигаться нельзя, поэтому бейдевинд позволяет подобраться к нужному направлению настолько близко, насколько это возможно.
+								</p>
+							</div>
+							<div class="r_maintext">
+								<h1>Лавирование</h1>
+								<p>
+									Когда цель находится <span style="font-family: 'Trattatello', serif">против ветра</span>. Если нужно двигаться туда, откуда дует ветер, лодка идёт зигзагом: сначала одним галсом, затем другим. Каждый поворот позволяет постепенно продвигаться к цели, даже если ветер дует практически навстречу. Иногда самый прямой путь — не самый короткий.
+								</p>
+							</div>
+							<div class="r_maintext">
+								<h1>Левый и правый галс</h1>
+								<p>
+									Галс показывает, с какого борта приходит ветер. Если ветер приходит с левого борта, лодка идёт <span style="font-family: 'Trattatello', serif">левым галсом</span>. Если с правого борта — правым галсом. Во время лавирования лодка чередует галсы, пересекая направление к своей цели.
+								</p>
+							</div>
+							<div class="r_maintext">
+								<h1>Против ветра</h1>
+								<p>
+								Если ветер дует прямо навстречу лодке, парус перестаёт эффективно работать.
+								Эту область называют <span style="font-family: 'Trattatello', serif">no-go zone</span> — зоной,
+								в которой движение прямо против ветра невозможно. Но это не означает, что точка назначения недоступна.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div id="r_pane4" class="r_pane" style="height: 100vh;">
 			<div class="r_pane_title">Парус</div>
@@ -330,12 +417,51 @@
 		}
 		// --- PANE2 ---
 		// ...
+		// --- PANE3 ---
+		let courseLoaded = false;
+
+		const courseTexts = document.querySelectorAll("#course_text > div");
+
+		injectSVG("course_svg").then(() => {
+			courseLoaded = true;
+			course_set();
+		});
+
+		function course_set() {
+			if (!courseLoaded) return;
+
+			const groups = [...course_svg.firstChild.children]
+				.filter(g => g.tagName === "g" && g.id !== "tr");
+
+			const p = Math.max(0, Math.min(1,
+				(scrollY - r_pane3.offsetTop) /
+				(r_pane3.offsetHeight - innerHeight)
+			));
+
+			const n = Math.min(6, Math.floor(p * 7));
+
+			groups.forEach((g, i) => {
+				g.style.opacity = i === n ? "1" : "0";
+			});
+
+			courseTexts.forEach((el, i) => {
+				el.style.display = i === n ? "block" : "none";
+			});
+		}
+
 		// ---
 		function scrollUpdate() {
 			UpdatePaneTitles();
 			yacht_set(scrollY);
 			big_set();
+			course_set();
 		}
 		scrollUpdate();
+		// --- SVG injection ---
+		async function injectSVG(id) {
+			const obj = document.getElementById(id);
+			const res = await fetch(obj.dataset.svg);
+			obj.innerHTML = await res.text();
+		}
 	</script>
 </html>
