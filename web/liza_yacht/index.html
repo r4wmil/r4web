@@ -61,6 +61,18 @@
 				text-align: center !important;
 			}
 		}
+		.r_blur_anim {
+			opacity: 1;
+			filter: blur(0px);
+			transition: opacity 1.2s, filter 1.5s;
+			transition-delay: 0s;
+		}
+		.r_blur_anim.hidden {
+			opacity: 0;
+			filter: blur(10px);
+			transition-delay: 1s;
+		}
+		/* --- Old --- */
 		.r_welcome {
 			display: block;
 			color: var(--text);
@@ -136,27 +148,26 @@
 		</div>
 		<div id="r_pane1" class="r_pane" style="height: 200vh;">
 			<div style="position: sticky; top: 0; height: 100vh;">
-				<div class="r_centering">
-					<div style="display: flex; align-items: center; justify-content: center; gap: 5vw; width: 90%;">
-
-						<div style="width: 40%; text-align: right;">
-							<h1>Big yacht</h1>
-							<p>Your text goes here.</p>
+				<div style="position: absolute; width: 100%; height: 100%; z-index: 0;">
+					<div class="r_centering">
+						<div id="r_p0_text1" class="r_blur_anim" style="width: 20%; text-align: left;">
+							<h1>lfadlgd</h1>
+							<p>sdfsdff</p>
 						</div>
-
-						<div id="obj_big_yacht" style="position: relative; width: 50%;">
-							<div style="
-													position: absolute;
-													right: 50%;
-													top: 0;
-													width: 50vw;
-													height: 100%;
-													background: var(--bg);
-													z-index: 0;
-													"></div>
-
-							<img src="https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/big_yacht.svg"
-									 style="display: block; width: 100%; height: auto; position: relative; z-index: 1;">
+					</div>
+				</div>
+				<div class="r_centering">
+					<div id="obj_big_yacht">
+						<div style="display: flex; align-items: center; justify-content: center; gap: 5vw; width: 90%;">
+							<div id="r_p0_text2" style="width: 40%; text-align: right; z-index: 1;">
+								<h1>Big yacht</h1>
+								<p>Your text goes here.</p>
+							</div>
+							<div style="position: relative; width: 50%;">
+								<div style="position: absolute; right: 60%; top: 0; width: 50vw; height: 100%; background: var(--bg); z-index: 0;"></div>
+								<img src="https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/big_yacht.svg"
+										 style="display: block; width: 100%; height: auto; position: relative; z-index: 1;">
+							</div>
 						</div>
 					</div>
 				</div>
@@ -173,7 +184,7 @@
 		var yacht_targ = -7;
 		var yacht_curr = -7;
 		function yacht_set(v) {
-			yacht_targ = Math.min(420 + v * 0.95, 950);
+			yacht_targ = Math.min(420 + v * 0.95, 700);
 		}
 		yacht_set(scrollY);
 		window.addEventListener("scroll", () => { yacht_set(scrollY); });
@@ -193,7 +204,15 @@
 		let big_curr = -100;
 		function big_set() {
 			const passed = scrollY > r_pane1.offsetTop + r_pane1.firstElementChild.offsetHeight - 10;
-			big_targ = passed ? 0 : -250;
+			if (passed) {
+				big_targ = 0;
+				if (!r_p0_text1.classList.contains("hidden")) {
+					r_p0_text1.classList.add("hidden");
+				}
+			} else {
+				big_targ = -250;
+				r_p0_text1.classList.remove("hidden");
+			}
 		}
 
 		window.addEventListener("scroll", big_set);
