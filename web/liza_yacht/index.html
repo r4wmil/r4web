@@ -385,6 +385,7 @@
 		</div>
 		<div id="r_pane9" class="r_pane" style="height: 100vh;">
 			<div class="r_pane_title">Безопасность</div>
+			<div id="physics"></div>
 		</div>
 		<div id="r_pane10" class="r_pane" style="height: 100vh;">
 			<div class="r_pane_title">Камбуз</div>
@@ -395,6 +396,7 @@
 			<div class="r_pane_title">123</div>
 		</div>
 	</body>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.20.0/matter.min.js"></script>
 	<script>
 		// --- Pane names ---
 		const panes = document.querySelectorAll(".r_pane");
@@ -493,7 +495,124 @@
 				el.style.display = i === n ? "block" : "none";
 			});
 		}
+		// --- PANE9 ---
+		const { Engine, Render, Runner, Bodies, Composite, Mouse, MouseConstraint } = Matter;
 
+		const svgs = [
+			"https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/1.svg",
+			"https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/2.svg",
+			"https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/3.svg",
+			"https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/4.svg",
+			"https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/5.svg",
+			"https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/6.svg",
+			"https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/7.svg"
+		];
+
+		let engine, render, runner;
+
+		function init() {
+			const W = innerWidth;
+			const H = innerHeight;
+
+			engine = Engine.create();
+			engine.gravity.y = 1;
+
+			render = Render.create({
+				element: document.getElementById("physics"),
+				engine,
+				options: {
+					width: W,
+					height: H,
+					wireframes: false,
+					background: "transparent"
+				}
+			});
+
+			// Objects
+			svgs.forEach((url, i) => {
+				Composite.add(engine.world, Bodies.circle(
+					W * (0.2 + i * 0.1),
+					H * (0.2 + i * 0.1),
+					60,
+					{
+						restitution: 0.7,
+						friction: 0.3,
+						render: {
+							sprite: {
+								texture: url,
+								xScale: 1,
+								yScale: 1
+							}
+						}
+					}
+				));
+			});
+			// Walls
+			const t = 20;
+			Composite.add(engine.world, [
+				Bodies.rectangle(W / 2, -t / 2, W, t, { isStatic: true }),
+				Bodies.rectangle(W / 2, H + t / 2, W, t, { isStatic: true }),
+				Bodies.rectangle(-t / 2, H / 2, t, H, { isStatic: true }),
+				Bodies.rectangle(W + t / 2, H / 2, t, H, { isStatic: true })
+			]);
+
+			// Out-of-bounds fix
+			Matter.Events.on(engine, "beforeUpdate", () => {
+				Composite.allBodies(engine.world).forEach(body => {
+					if (body.isStatic) return;
+
+					const max = 40;
+					const speed = Math.hypot(body.velocity.x, body.velocity.y);
+
+					if (speed > max) {
+						Matter.Body.setVelocity(body, {
+							x: body.velocity.x / speed * max,
+							y: body.velocity.y / speed * max
+						});
+					}
+				});
+			});
+
+			// Mouse
+			const mouse = Mouse.create(render.canvas);
+
+			// Keep page scrolling
+			mouse.element.removeEventListener("wheel", mouse.mousewheel);
+
+			Composite.add(engine.world, MouseConstraint.create(engine, {
+				mouse,
+				constraint: {
+					stiffness: 0.1,
+					render: { visible: false }
+				}
+			}));
+
+			render.mouse = mouse;
+
+			Render.run(render);
+			runner = Runner.run(Runner.create(), engine);
+		}
+
+		function restart() {
+			if (render) {
+				Render.stop(render);
+				render.canvas.remove();
+				Runner.stop(runner);
+				Engine.clear(engine);
+			}
+
+			init();
+		}
+
+		init();
+		addEventListener("resize", restart);
+		let lastScroll = scrollY;
+		function gravScroll() {
+			const speed = scrollY - lastScroll;
+			engine.gravity.y = 1 + speed * 0.1;
+			lastScroll = scrollY;
+			setTimeout(() => engine.gravity.y = 1, 100);
+		}
 		// ---
 		function scrollUpdate() {
 			UpdatePaneTitles();
@@ -501,6 +620,7 @@
 			yacht_set(scrollY);
 			big_set();
 			course_set();
+			gravScroll();
 		}
 		scrollUpdate();
 		// --- SVG injection ---
