@@ -134,6 +134,33 @@
 		#course_text > div.course_visible {
 			display: block;
 		}
+		/* --- PANE10 --- */
+		#r_pane11 {
+			position: relative;
+		}
+		#r_pane11 > svg {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: auto;
+			display: block;
+		}
+		#r_pane11 #curator,
+		#r_pane11 #group,
+		#r_pane11 #author {
+			opacity: 0;
+			filter: blur(15px);
+			transition-delay: 0.5s;
+			transition: opacity 3s, filter 3s;
+		}
+
+		#r_pane11 #curator.visible,
+		#r_pane11 #group.visible,
+		#r_pane11 #author.visible {
+			opacity: 1;
+			filter: blur(0);
+		}
 		/* --- Text --- */
 		.r_maintext * {
 			font-family: 'Alegreya', serif;
@@ -362,8 +389,10 @@
 		<div id="r_pane10" class="r_pane" style="height: 100vh;">
 			<div class="r_pane_title">Камбуз</div>
 		</div>
-		<div id="r_pane11" class="r_pane" style="height: 100vh;">
-			<div class="r_pane_title">Концовка</div>
+		<div id="r_pane11"
+			data-svg="https://raw.githubusercontent.com/r4wmil/liyacht_images/refs/heads/main/dno2.svg"
+			class="r_pane">
+			<div class="r_pane_title">123</div>
 		</div>
 	</body>
 	<script>
@@ -374,10 +403,19 @@
 				const name = pane.querySelector(".r_pane_title");
 				if (!name) return;
 				const rect = pane.getBoundingClientRect();
-
 				name.classList.toggle(
 					"visible",
 					rect.top < innerHeight && rect.bottom > 0
+				);
+			});
+		}
+		function UpdateDnoTitles() {
+			["curator", "group", "author"].forEach(id => {
+				const el = r_pane11.querySelector(`#${id}`);
+				const rect = r_pane11.getBoundingClientRect();
+				if (el) el.classList.toggle(
+					"visible",
+					rect.top < innerHeight + 10 && rect.bottom > -10
 				);
 			});
 		}
@@ -422,12 +460,16 @@
 		// ...
 		// --- PANE3 ---
 		let courseLoaded = false;
+		let dnoLoaded = false;
 
 		const courseTexts = document.querySelectorAll("#course_text > div");
 
 		injectSVG("course_svg").then(() => {
 			courseLoaded = true;
 			course_set();
+		});
+		injectSVG("r_pane11").then(() => {
+			dnoLoaded = true;
 		});
 
 		function course_set() {
@@ -455,6 +497,7 @@
 		// ---
 		function scrollUpdate() {
 			UpdatePaneTitles();
+			UpdateDnoTitles();
 			yacht_set(scrollY);
 			big_set();
 			course_set();
@@ -465,6 +508,10 @@
 			const obj = document.getElementById(id);
 			const res = await fetch(obj.dataset.svg);
 			obj.innerHTML = await res.text();
+			obj.querySelectorAll("[width], [height]").forEach(el => {
+				el.removeAttribute("width");
+				el.removeAttribute("height");
+			});
 		}
 	</script>
 </html>
