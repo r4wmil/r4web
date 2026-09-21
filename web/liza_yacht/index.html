@@ -134,7 +134,7 @@
 		#course_text > div.course_visible {
 			display: block;
 		}
-		/* --- PANE10 --- */
+		/* --- PANE11 --- */
 		#r_pane11 {
 			position: relative;
 		}
@@ -470,9 +470,6 @@
 			courseLoaded = true;
 			course_set();
 		});
-		injectSVG("r_pane11").then(() => {
-			dnoLoaded = true;
-		});
 
 		function course_set() {
 			if (!courseLoaded) return;
@@ -613,6 +610,10 @@
 			lastScroll = scrollY;
 			setTimeout(() => engine.gravity.y = 1, 100);
 		}
+		// --- PANE11
+		injectSVG("r_pane11").then(() => {
+			dnoLoaded = true;
+		});
 		// ---
 		function scrollUpdate() {
 			UpdatePaneTitles();
